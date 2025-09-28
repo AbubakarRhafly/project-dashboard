@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Login</title>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center p-6">
+    <main class="w-full max-w-md">
+        <section class="bg-white rounded-2xl shadow-xl overflow-hidden">
+        <div class="p-8">
+            <div class="mb-8 text-center">
+            <div class="mx-auto w-14 h-14 rounded-2xl bg-slate-900/90 flex items-center justify-center">
+                <!-- Lock icon -->
+                <svg viewBox="0 0 24 24" class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M8 10V7a4 4 0 1 1 8 0v3"/>
+                <rect x="5" y="10" width="14" height="10" rx="2"/>
+                </svg>
+            </div>
+            <h1 class="mt-4 text-2xl font-semibold text-slate-900">Welcome Back</h1>
+            <p class="text-slate-500 text-sm">Masuk ke akun anda</p>
+            </div>
+
+            <form class="space-y-5" action="#" method="post">
+            <label class="block">
+                <span class="block text-sm font-medium text-slate-700">Email</span>
+                <input type="email" name="email" required placeholder="you@example.com"
+                class="mt-2 w-full rounded-xl border-slate-300 focus:border-slate-900 focus:ring-slate-900/20 px-4 py-2.5" />
+            </label>
+
+            <label class="block">
+                <span class="block text-sm font-medium text-slate-700">Password</span>
+                <input type="password" name="password" required placeholder="••••••••"
+                class="mt-2 w-full rounded-xl border-slate-300 focus:border-slate-900 focus:ring-slate-900/20 px-4 py-2.5" />
+            </label>
+
+            <div class="flex items-center justify-between text-sm">
+                <label class="inline-flex items-center gap-2 select-none">
+                <input type="checkbox" class="rounded border-slate-300 text-slate-900 focus:ring-slate-900/30" />
+                <span class="text-slate-600">Ingat saya</span>
+                </label>
+                <a href="#" class="text-slate-900 font-medium">Lupa password?</a>
+            </div>
+
+            <button type="submit"
+                class="w-full py-3 rounded-xl bg-slate-900 text-white font-semibold shadow hover:bg-slate-800">Masuk</button>
+            </form>
+        </div>
+
+        <div class="bg-slate-50 px-8 py-5 text-center text-sm text-slate-500">
+            Belum punya akun? <a href="#" class="text-slate-900 font-medium">Daftar</a>
+        </div>
+        </section>
+    </main>
+</body>
+</html>

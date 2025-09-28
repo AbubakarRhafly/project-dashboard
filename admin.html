@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="id" class="h-full">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Admin Dashboard</title>
+</head>
+<body class="h-full bg-slate-100 dark:bg-slate-900">
+    <!-- Toggle sidebar (mobile) -->
+    <input id="sidebar-toggle" type="checkbox" class="peer hidden" />
+
+    <div class="flex min-h-screen text-slate-800 dark:text-slate-100">
+        <!-- Sidebar -->
+        <aside class="z-20 fixed inset-y-0 left-0 w-72 -translate-x-full peer-checked:translate-x-0 transition-transform duration-300 ease-in-out bg-white dark:bg-slate-800 shadow-lg lg:translate-x-0 lg:static lg:shadow-none">
+        <div class="p-6 border-b border-slate-200 dark:border-slate-700">
+            <a href="#" class="flex items-center gap-3">
+            <span class="inline-flex w-9 h-9 rounded-xl bg-slate-900 dark:bg-slate-100 items-center justify-center">
+                <svg viewBox="0 0 24 24" class="w-5 h-5 text-white dark:text-slate-900" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12h18M12 3v18"/></svg>
+            </span>
+            <span class="text-lg font-semibold">Admin Panel</span>
+            </a>
+        </div>
+        <nav class="p-4 space-y-1 text-sm">
+            <a class="flex items-center gap-3 px-4 py-2 rounded-xl bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900" href="#">
+            <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12l9-9 9 9M4.5 10.5V21h15V10.5"/></svg>
+            Dashboard
+            </a>
+            <a class="flex items-center gap-3 px-4 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700/70" href="#">
+            <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 11V7a4 4 0 10-8 0v4M5 11h14v9H5z"/></svg>
+            Users
+            </a>
+            <a class="flex items-center gap-3 px-4 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700/70" href="#">
+            <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+            Orders
+            </a>
+            <a class="flex items-center gap-3 px-4 py-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-700/70" href="#">
+            <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 6v12M6 12h12"/></svg>
+            Settings
+            </a>
+        </nav>
+        <div class="mt-auto p-4 text-xs text-slate-500 dark:text-slate-400 hidden lg:block">© 2025 Company</div>
+        </aside>
+
+        <!-- Content -->
+        <div class="flex-1 flex flex-col min-w-0 lg:ml-0">
+        <!-- Header -->
+        <header class="sticky top-0 z-10 bg-white/80 dark:bg-slate-900/70 backdrop-blur border-b border-slate-200 dark:border-slate-700">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center gap-4">
+            <!-- Mobile menu -->
+            <label for="sidebar-toggle" class="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer">
+                <svg viewBox="0 0 24 24" class="w-6 h-6 text-slate-700 dark:text-slate-200" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+            </label>
+
+            <h1 class="text-lg sm:text-xl font-semibold">Users</h1>
+
+            <div class="ml-auto flex items-center gap-3">
+                <!-- Search -->
+                <div class="hidden md:block">
+                <label class="relative">
+                    <input type="text" placeholder="Search..." class="w-64 rounded-xl border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 pl-10 pr-3 py-2 focus:border-slate-900 dark:focus:border-slate-300 focus:ring-slate-900/20 dark:focus:ring-slate-300/20" />
+                    <span class="absolute left-3 top-2.5 text-slate-400 dark:text-slate-500">
+                    <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="M21 21l-3.5-3.5"/></svg>
+                    </span>
+                </label>
+                </div>
+
+                <!-- Add User (open modal) -->
+                <label for="modal-add" class="inline-flex items-center gap-2 rounded-xl bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 px-4 py-2 font-medium cursor-pointer hover:bg-slate-800 dark:hover:bg-slate-200">
+                <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14M5 12h14"/></svg>
+                Add User
+                </label>
+
+                <!-- Profile dropdown (no JS) -->
+                <details class="relative">
+                <summary class="list-none inline-flex items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-700 px-3 py-2 cursor-pointer select-none hover:bg-slate-50 dark:hover:bg-slate-800">
+                    <span class="inline-flex w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700"></span>
+                    <span class="hidden sm:block text-sm">Admin</span>
+                    <svg viewBox="0 0 24 24" class="w-4 h-4 text-slate-500 dark:text-slate-400" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 9l6 6 6-6"/></svg>
+                </summary>
+                <div class="absolute right-0 mt-2 w-40 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 shadow">
+                    <a href="#" class="block px-4 py-2 text-sm hover:bg-slate-50 dark:hover:bg-slate-700/70">Profile</a>
+                    <a href="#" class="block px-4 py-2 text-sm hover:bg-slate-50 dark:hover:bg-slate-700/70">Settings</a>
+                    <div class="my-1 border-t border-slate-200 dark:border-slate-700"></div>
+                    <a href="login.html" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10">Sign out</a>
+                </div>
+                </details>
+            </div>
+            </div>
+        </header>
+
+        <!-- Main -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- Cards -->
+            <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-8">
+            <article class="rounded-2xl bg-white dark:bg-slate-800 p-5 shadow-sm border border-slate-200 dark:border-slate-700">
+                <p class="text-sm text-slate-500 dark:text-slate-400">Total Users</p>
+                <p class="mt-2 text-2xl font-semibold">1,284</p>
+            </article>
+            <article class="rounded-2xl bg-white dark:bg-slate-800 p-5 shadow-sm border border-slate-200 dark:border-slate-700">
+                <p class="text-sm text-slate-500 dark:text-slate-400">Active Today</p>
+                <p class="mt-2 text-2xl font-semibold">167</p>
+            </article>
+            <article class="rounded-2xl bg-white dark:bg-slate-800 p-5 shadow-sm border border-slate-200 dark:border-slate-700">
+                <p class="text-sm text-slate-500 dark:text-slate-400">New Signups</p>
+                <p class="mt-2 text-2xl font-semibold">32</p>
+            </article>
+            <article class="rounded-2xl bg-white dark:bg-slate-800 p-5 shadow-sm border border-slate-200 dark:border-slate-700">
+                <p class="text-sm text-slate-500 dark:text-slate-400">Churn</p>
+                <p class="mt-2 text-2xl font-semibold">2.1%</p>
+            </article>
+            </section>
+
+            <!-- Users Table -->
+            <section class="rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+            <div class="px-6 py-4 flex items-center justify-between">
+                <h2 class="text-base font-semibold">User List</h2>
+                <div class="flex items-center gap-3 text-sm">
+                <span class="text-slate-500 dark:text-slate-400">Show</span>
+                <select class="rounded-lg border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 focus:border-slate-900 dark:focus:border-slate-300 focus:ring-slate-900/20 dark:focus:ring-slate-300/20 py-1.5">
+                    <option>10</option>
+                    <option>25</option>
+                    <option>50</option>
+                </select>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto border-t border-slate-200 dark:border-slate-700">
+                <table class="min-w-full text-sm">
+                <thead class="bg-slate-50 dark:bg-slate-900/40 text-slate-600 dark:text-slate-300">
+                    <tr>
+                    <th class="px-6 py-3 text-left font-medium">Name</th>
+                    <th class="px-6 py-3 text-left font-medium">Email</th>
+                    <th class="px-6 py-3 text-left font-medium">Role</th>
+                    <th class="px-6 py-3 text-left font-medium">Status</th>
+                    <th class="px-6 py-3 text-right font-medium">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200 dark:divide-slate-700">
+                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50">
+                    <td class="px-6 py-3 font-medium">Abubakar Rhafly Eka Putera</td>
+                    <td class="px-6 py-3 text-slate-600 dark:text-slate-300">rhaflyekaputera@company.com</td>
+                    <td class="px-6 py-3">Admin</td>
+                    <td class="px-6 py-3"><span class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300">Active</span></td>
+                    <td class="px-6 py-3 text-right">
+                        <div class="inline-flex items-center gap-2">
+                        <label for="modal-add" class="rounded-lg border border-slate-200 dark:border-slate-700 px-3 py-1.5 hover:bg-slate-50 dark:hover:bg-slate-700/70 cursor-pointer">Edit</label>
+                        <label for="confirm-delete" class="rounded-lg border border-red-300 text-red-600 px-3 py-1.5 hover:bg-red-50 dark:border-red-700 dark:hover:bg-red-900/20 cursor-pointer">Delete</label>
+                        </div>
+                    </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50">
+                    <td class="px-6 py-3 font-medium">Della Septi</td>
+                    <td class="px-6 py-3 text-slate-600 dark:text-slate-300">dell.sept@company.com</td>
+                    <td class="px-6 py-3">Editor</td>
+                    <td class="px-6 py-3"><span class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300">Pending</span></td>
+                    <td class="px-6 py-3 text-right">
+                        <div class="inline-flex items-center gap-2">
+                        <label for="modal-add" class="rounded-lg border border-slate-200 dark:border-slate-700 px-3 py-1.5 hover:bg-slate-50 dark:hover:bg-slate-700/70 cursor-pointer">Edit</label>
+                        <label for="confirm-delete" class="rounded-lg border border-red-300 text-red-600 px-3 py-1.5 hover:bg-red-50 dark:border-red-700 dark:hover:bg-red-900/20 cursor-pointer">Delete</label>
+                        </div>
+                    </td>
+                    </tr>
+                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50">
+                    <td class="px-6 py-3 font-medium">Abu Jibril</td>
+                    <td class="px-6 py-3 text-slate-600 dark:text-slate-300">abujibril@company.com</td>
+                    <td class="px-6 py-3">Viewer</td>
+                    <td class="px-6 py-3"><span class="inline-flex items-center px-2 py-1 rounded-full text-xs bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-200">Disabled</span></td>
+                    <td class="px-6 py-3 text-right">
+                        <div class="inline-flex items-center gap-2">
+                        <label for="modal-add" class="rounded-lg border border-slate-200 dark:border-slate-700 px-3 py-1.5 hover:bg-slate-50 dark:hover:bg-slate-700/70 cursor-pointer">Edit</label>
+                        <label for="confirm-delete" class="rounded-lg border border-red-300 text-red-600 px-3 py-1.5 hover:bg-red-50 dark:border-red-700 dark:hover:bg-red-900/20 cursor-pointer">Delete</label>
+                        </div>
+                    </td>
+                    </tr>
+                </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination (static) -->
+            <div class="px-6 py-4 flex items-center justify-between border-t border-slate-200 dark:border-slate-700 text-sm">
+                <span class="text-slate-500 dark:text-slate-400">Showing 1–10 of 128</span>
+                <div class="flex items-center gap-2">
+                <a href="#" class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/70">Prev</a>
+                <a href="#" class="px-3 py-1.5 rounded-lg bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900">1</a>
+                <a href="#" class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/70">2</a>
+                <a href="#" class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/70">3</a>
+                <a href="#" class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/70">Next</a>
+                </div>
+            </div>
+            </section>
+        </main>
+        </div>
+    </div>
+
+    <!-- MODAL: Add/Edit User (pure CSS, sudah include) -->
+    <input id="modal-add" type="checkbox" class="peer/modal hidden" />
+    <!-- Overlay -->
+    <label for="modal-add" class="fixed inset-0 z-30 hidden peer-checked/modal:block bg-slate-900/50"></label>
+    <!-- Dialog -->
+    <div class="fixed inset-0 z-40 hidden peer-checked/modal:flex items-center justify-center p-4">
+        <!-- klik di luar untuk close -->
+        <label for="modal-add" class="absolute inset-0"></label>
+
+        <div class="relative w-full max-w-lg bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+            <h3 class="text-base font-semibold">Add User</h3>
+            <label for="modal-add" class="inline-flex w-8 h-8 items-center justify-center rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer" title="Close">
+            <svg viewBox="0 0 24 24" class="w-5 h-5 text-slate-600 dark:text-slate-300" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 6l12 12M18 6L6 18"/></svg>
+            </label>
+        </div>
+        <form class="p-6 space-y-4" action="#" method="post">
+            <label class="block">
+            <span class="block text-sm font-medium">Name</span>
+            <input type="text" required class="mt-2 w-full rounded-xl border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 focus:border-slate-900 dark:focus:border-slate-300 focus:ring-slate-900/20 dark:focus:ring-slate-300/20 px-4 py-2.5" />
+            </label>
+            <label class="block">
+            <span class="block text-sm font-medium">Email</span>
+            <input type="email" required class="mt-2 w-full rounded-xl border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 focus:border-slate-900 dark:focus:border-slate-300 focus:ring-slate-900/20 dark:focus:ring-slate-300/20 px-4 py-2.5" />
+            </label>
+            <label class="block">
+            <span class="block text-sm font-medium">Role</span>
+            <select class="mt-2 w-full rounded-xl border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 focus:border-slate-900 dark:focus:border-slate-300 focus:ring-slate-900/20 dark:focus:ring-slate-300/20 px-4 py-2.5">
+                <option>Admin</option>
+                <option>Editor</option>
+                <option>Viewer</option>
+            </select>
+            </label>
+            <div class="flex items-center justify-end gap-3 pt-2">
+            <label for="modal-add" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/70 cursor-pointer">Cancel</label>
+            <button type="submit" class="px-4 py-2 rounded-xl bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 font-medium hover:bg-slate-800 dark:hover:bg-slate-200">Save</button>
+            </div>
+        </form>
+        </div>
+    </div>
+
+    <!-- MODAL: Confirm Delete (pure CSS) -->
+    <input id="confirm-delete" type="checkbox" class="peer/confirm hidden" />
+    <label for="confirm-delete" class="fixed inset-0 z-30 hidden peer-checked/confirm:block bg-slate-900/50"></label>
+    <div class="fixed inset-0 z-40 hidden peer-checked/confirm:flex items-center justify-center p-4">
+        <label for="confirm-delete" class="absolute inset-0"></label>
+        <div class="relative w-full max-w-sm bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+        <div class="p-6 space-y-4">
+            <div class="flex items-start gap-3">
+            <div class="mt-0.5 inline-flex w-9 h-9 rounded-xl bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-300 items-center justify-center">
+                <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 9v4m0 4h.01M3 6h18l-1.5 12.5A2 2 0 0 1 17.5 20h-11a2 2 0 0 1-1.99-1.5L3 6z"/></svg>
+            </div>
+            <div>
+                <h3 class="text-base font-semibold">Delete user?</h3>
+                <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">Tindakan ini tidak bisa dibatalkan.</p>
+            </div>
+            </div>
+            <div class="flex items-center justify-end gap-3 pt-2">
+            <label for="confirm-delete" class="px-4 py-2 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/70 cursor-pointer">Cancel</label>
+            <button class="px-4 py-2 rounded-xl bg-red-600 text-white hover:bg-red-500">Delete</button>
+            </div>
+        </div>
+        </div>
+    </div>
+    </body>
+</html>
