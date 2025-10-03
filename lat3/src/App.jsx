@@ -1,11 +1,15 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import './App.css'
-import Home from "./Pages/Home.jsx";
-import Login from "./Pages/login.jsx";
+import { useState } from "react";
+import "./App.css";
+import Login from "./pages/login.jsx";   // pastikan lowercase
+import Admin from "./pages/admin.jsx";
 
-createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <Login />
-  </StrictMode>
-);
+export default function App() {
+  const [isAuthed, setIsAuthed] = useState(false);
+
+  const handleLogin = ({ email, password }) => {
+    // validasi / API call kalau perlu
+    setIsAuthed(true);
+  };
+
+  return isAuthed ? <Admin /> : <Login onLogin={handleLogin} />;
+}

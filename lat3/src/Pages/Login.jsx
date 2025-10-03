@@ -1,5 +1,13 @@
-// src/Pages/Login.jsx
-export default function Login() {
+// ⬇️ tambahin onLogin di props (default biar aman)
+export default function Login({ onLogin = () => {} }) {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const form = new FormData(e.currentTarget);
+    const email = form.get("email");
+    const password = form.get("password");
+    onLogin({ email, password });   // ⬅️ trigger ke App
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center p-6">
       <main className="w-full max-w-md">
@@ -7,8 +15,7 @@ export default function Login() {
           <div className="p-8">
             <div className="mb-8 text-center">
               <div className="mx-auto w-14 h-14 rounded-2xl bg-slate-900/90 flex items-center justify-center">
-                {/* Lock icon */}
-                <svg viewBox="0 0 24 24" className="w-7 h-7 text-white" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+                <svg viewBox="0 0 24 24" className="w-7 h-7 text-white" fill="none" stroke="currentColor" strokeWidth="1.5">
                   <path d="M8 10V7a4 4 0 1 1 8 0v3" />
                   <rect x="5" y="10" width="14" height="10" rx="2" />
                 </svg>
@@ -17,7 +24,9 @@ export default function Login() {
               <p className="text-slate-500 text-sm">Masuk ke akun anda</p>
             </div>
 
-            <form className="space-y-5" action="#" method="post" autoComplete="on">
+            {/* ⬇️ cuma tambah onSubmit */}
+            <form className="space-y-5" onSubmit={handleSubmit}>
+              {/* ...SEMUA KOMPONEN & KELAS MU TETAP SAMA... */}
               <label className="block">
                 <span className="block text-sm font-medium text-slate-700">Email</span>
                 <input
