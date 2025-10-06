@@ -1,13 +1,12 @@
 import { useState } from "react";
 import "./App.css";
-import Login from "./pages/login.jsx";   // pastikan lowercase
+import Login from "./pages/login.jsx";
 import Admin from "./pages/admin.jsx";
 
 export default function App() {
   const [isAuthed, setIsAuthed] = useState(false);
 
   const handleLogin = ({ email, password }) => {
-    // validasi / API call kalau perlu
     setIsAuthed(true);
   };
 
