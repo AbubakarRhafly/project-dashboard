@@ -87,13 +87,13 @@ export default function Login({ onLogin = () => {} }) {
                     required
                     placeholder=" "
                     className="peer w-full rounded-2xl border border-slate-300 bg-transparent pl-10 pr-12 pb-2.5 pt-4 text-slate-900 outline-none transition
-                               focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10"
+                              focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10"
                   />
                   <label
                     htmlFor="password"
                     className="pointer-events-none absolute left-10 top-2.5 px-1 text-slate-500 transition
-                               peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-sm
-                               peer-focus:-top-2 peer-focus:bg-white peer-focus:text-xs peer-focus:text-slate-700"
+                              peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-sm
+                              peer-focus:-top-2 peer-focus:bg-white peer-focus:text-xs peer-focus:text-slate-700"
                   >
                     Password
                   </label>
@@ -135,8 +135,8 @@ export default function Login({ onLogin = () => {} }) {
                   type="submit"
                   disabled={loading}
                   className="w-full rounded-2xl bg-slate-900 px-4 py-3 font-semibold text-white shadow-sm transition
-                             hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-900/20
-                             disabled:cursor-not-allowed disabled:opacity-70"
+                            hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-900/20
+                            disabled:cursor-not-allowed disabled:opacity-70"
                 >
                   {loading ? "Memproses..." : "Masuk"}
                 </button>
