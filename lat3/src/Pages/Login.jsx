@@ -1,16 +1,42 @@
 // Simple–Elegant Polished (split, floating label, icons, toggle password)
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { dummyUser } from "../Data/Dummy.js"; // perhatikan huruf 'D' besar
 
-export default function Login({ onLogin = () => {} }) {
+export default function Login() {
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [err, setErr] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setErr("");
     const f = new FormData(e.currentTarget);
+    const email = f.get("email")?.trim().toLowerCase();
+    const password = f.get("password");
+
     setLoading(true);
-    onLogin({ email: f.get("email"), password: f.get("password") });
-    setLoading(false);
+
+    // cocokkan dengan dummy
+    const ok =
+      email === dummyUser.email.toLowerCase() &&
+      password === dummyUser.password;
+
+    if (!ok) {
+      setLoading(false);
+      setErr("Email atau password salah.");
+      return;
+    }
+
+    // simpan session (kunci harus sama dengan ProtectedRoute)
+    localStorage.setItem(
+      "auth",
+      JSON.stringify({ email: dummyUser.email, name: dummyUser.name, role: "admin" })
+    );
+
+    // pindah ke admin
+    navigate("/admin", { replace: true });
   };
 
   return (
@@ -39,10 +65,12 @@ export default function Login({ onLogin = () => {} }) {
                 <p className="mt-1 text-sm text-slate-500">Silakan gunakan kredensial akun Anda</p>
               </header>
 
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+                {/* error msg */}
+                {err && <p className="text-sm text-red-600">{err}</p>}
+
                 {/* Email */}
                 <div className="relative">
-                  {/* icon */}
                   <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
                     <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.5">
                       <path d="M4 6h16v12H4z" />
@@ -72,7 +100,6 @@ export default function Login({ onLogin = () => {} }) {
 
                 {/* Password */}
                 <div className="relative">
-                  {/* icon */}
                   <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
                     <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.5">
                       <path d="M8 11V8a4 4 0 1 1 8 0v3" />
@@ -106,13 +133,11 @@ export default function Login({ onLogin = () => {} }) {
                     aria-label={showPass ? "Sembunyikan password" : "Tampilkan password"}
                   >
                     {showPass ? (
-                      // eye-off
                       <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.5">
                         <path d="M3 3l18 18" />
-                        <path d="M10.58 10.58A2 2 0 0 0 12 14a2 2 0 0 0 1.42-.58M9.88 4.24A10.94 10.94 0 0 1 12 4c5 0 9 4 10 7- .29 .83 - .73 1.61 - 1.29 2.31M6.1 6.1C4.2 7.38 2.84 9.09 2 11c1 3 5 7 10 7 1.34 0 2.62-.26 3.79-.74" />
+                        <path d="M2 12s3.5-7 10-7c2.2 0 4.1.7 5.73 1.77M21.9 12.6C20.8 15.6 17.5 19 12 19c-3.2 0-5.8-1.3-7.7-3.1" />
                       </svg>
                     ) : (
-                      // eye
                       <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.5">
                         <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" />
                         <circle cx="12" cy="12" r="3" />
@@ -150,10 +175,9 @@ export default function Login({ onLogin = () => {} }) {
               </p>
             </div>
 
-            {/* Panel kanan (dekor, sama konsepnya tapi lebih refined) */}
+            {/* Panel kanan */}
             <div className="relative hidden md:block md:col-span-2">
               <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700" />
-              {/* grid halus */}
               <div
                 className="absolute inset-0 opacity-20"
                 style={{
@@ -162,7 +186,6 @@ export default function Login({ onLogin = () => {} }) {
                   backgroundSize: "32px 32px",
                 }}
               />
-              {/* copy minimal */}
               <div className="relative z-10 flex h-full items-end p-8">
                 <div className="space-y-1">
                   <h2 className="text-lg font-medium text-white/90">Dashboard Admin</h2>
