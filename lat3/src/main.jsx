@@ -26,7 +26,7 @@ const router = createBrowserRouter([
 
   // Protected + Admin layout (nested)
   {
-    element: <ProtectedRoute />, // cek localStorage
+    element: <ProtectedRoute />,
     children: [
       {
         path: "/admin",

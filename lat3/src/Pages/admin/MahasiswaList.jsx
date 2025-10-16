@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { mahasiswaList } from "../../Data/Dummy.js"; // <- sesuai folder kamu
+import { mahasiswaList } from "../../Data/Dummy.js";
 
 export default function MahasiswaList() {
   return (

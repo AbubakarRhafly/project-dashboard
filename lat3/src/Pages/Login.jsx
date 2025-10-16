@@ -1,7 +1,6 @@
-// Simple–Elegant Polished (split, floating label, icons, toggle password)
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { dummyUser } from "../Data/Dummy.js"; // perhatikan huruf 'D' besar
+import { dummyUser } from "../Data/Dummy.js";
 
 export default function Login() {
   const [showPass, setShowPass] = useState(false);
@@ -18,7 +17,6 @@ export default function Login() {
 
     setLoading(true);
 
-    // cocokkan dengan dummy
     const ok =
       email === dummyUser.email.toLowerCase() &&
       password === dummyUser.password;
@@ -35,7 +33,6 @@ export default function Login() {
       JSON.stringify({ email: dummyUser.email, name: dummyUser.name, role: "admin" })
     );
 
-    // pindah ke admin
     navigate("/admin", { replace: true });
   };
 
