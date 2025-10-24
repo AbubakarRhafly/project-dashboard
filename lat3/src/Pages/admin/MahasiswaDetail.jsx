@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router-dom";
-import { mahasiswaList } from "../../Data/Dummy.js";
+import { mahasiswalist } from "../../Data/Dummy.js";  // dari pages/admin
 
 export default function MahasiswaDetail() {
   const { id } = useParams();
