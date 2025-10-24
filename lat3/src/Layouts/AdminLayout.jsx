@@ -1,13 +1,11 @@
-// src/layouts/AdminLayout.jsx
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 export default function AdminLayout() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [open, setOpen] = useState(false); // drawer mobile
+  const [open, setOpen] = useState(false);
 
-  // tutup drawer kalau route berpindah
   useEffect(() => {
     setOpen(false);
   }, [location.pathname]);
@@ -115,4 +113,3 @@ export default function AdminLayout() {
     </div>
   );
 }
-  
