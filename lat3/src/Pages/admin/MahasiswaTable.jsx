@@ -1,4 +1,3 @@
-// src/Pages/admin/MahasiswaTable.jsx
 import { Link } from "react-router-dom";
 
 export default function MahasiswaTable({ mahasiswa, openEditModal, onDelete }) {

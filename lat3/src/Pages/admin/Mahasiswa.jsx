@@ -1,4 +1,3 @@
-// src/Pages/admin/Mahasiswa.jsx
 import { useMemo, useState } from "react";
 import { mahasiswalist as seed } from "../../Data/Dummy.js";
 
@@ -6,99 +5,98 @@ import MahasiswaModal from "./MahasiswaModal.jsx";
 import MahasiswaTable from "./MahasiswaTable.jsx";
 
 export default function Mahasiswa() {
-  // state mahasiswa
-  const [mahasiswa, setMahasiswa] = useState(() => seed);
-  // state selected mahasiswa
-  const [selectedMahasiswa, setSelectedMahasiswa] = useState(null);
-  // state modal
-  const [isModalOpen, setModalOpen] = useState(false);
+    // state mahasiswa
+    const [mahasiswa, setMahasiswa] = useState(() => seed);
+    // state selected mahasiswa
+    const [selectedMahasiswa, setSelectedMahasiswa] = useState(null);
+    // state modal
+    const [isModalOpen, setModalOpen] = useState(false);
 
-  const total = useMemo(() => mahasiswa.length, [mahasiswa]);
+    const total = useMemo(() => mahasiswa.length, [mahasiswa]);
 
-  // tambah mahasiswa baru
-  const storeMahasiswa = (data) => {
+    // tambah mahasiswa baru
+    const storeMahasiswa = (data) => {
     setMahasiswa((prev) => [...prev, data]);
-  };
+    };
 
-  // update mahasiswa dengan nim
-  const updateMahasiswa = (data) => {
+    // update mahasiswa dengan nim
+    const updateMahasiswa = (data) => {
     setMahasiswa((prev) =>
-      prev.map((m) => (m.nim === data.nim ? { ...m, ...data } : m))
+        prev.map((m) => (m.nim === data.nim ? { ...m, ...data } : m))
     );
-  };
+    };
 
-  // delete mahasiswa dengan nim
-  const deleteMahasiswa = (nim) => {
+    // delete mahasiswa dengan nim
+    const deleteMahasiswa = (nim) => {
     setMahasiswa((prev) => prev.filter((m) => m.nim !== nim));
-  };
+    };
 
-  // buka modal tambah
-  const openAddModal = () => {
+    // buka modal tambah
+    const openAddModal = () => {
     setSelectedMahasiswa(null);
     setModalOpen(true);
-  };
+    };
 
-  // buka modal edit, isi selectedMahasiswa dari nim
-  const openEditModal = (nim) => {
+    // buka modal edit, isi selectedMahasiswa dari nim
+    const openEditModal = (nim) => {
     const found = mahasiswa.find((m) => m.nim === nim);
     if (found) {
-      setSelectedMahasiswa(found);
-      setModalOpen(true);
+        setSelectedMahasiswa(found);
+        setModalOpen(true);
     }
-  };
+    };
 
-  // handle submit dari modal:
-  // kalau selectedMahasiswa ada → update, kalau tidak → tambah
-  const handleSubmit = (formData) => {
+    // handle submit dari modal:
+    const handleSubmit = (formData) => {
     if (selectedMahasiswa) {
-      updateMahasiswa(formData);
+        updateMahasiswa(formData);
     } else {
-      storeMahasiswa(formData);
+        storeMahasiswa(formData);
     }
-  };
+    };
 
-  // handle delete, terima nim
-  const handleDelete = (nim) => {
+    // handle delete, terima nim
+    const handleDelete = (nim) => {
     deleteMahasiswa(nim);
-  };
+    };
 
-  return (
+    return (
     <div className="space-y-4">
-      {/* HEADER SAMA SEPERTI LIST LAMA */}
-      <div className="flex items-center justify-between">
+        {/* HEADER SAMA SEPERTI LIST LAMA */}
+        <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-semibold">Mahasiswa</h2>
-          <p className="text-slate-500 text-sm">
+            <h2 className="text-xl font-semibold">Mahasiswa</h2>
+            <p className="text-slate-500 text-sm">
             Kelola data Mahasiswa (CRUD via state)
-          </p>
-          <p className="text-xs text-slate-400 mt-1">
+            </p>
+            <p className="text-xs text-slate-400 mt-1">
             Total: <span className="font-medium text-slate-700">{total}</span>
-          </p>
+            </p>
         </div>
 
         <button
-          type="button"
-          onClick={openAddModal}
-          className="rounded-xl bg-slate-900 text-white px-4 py-2 hover:bg-slate-800"
+            type="button"
+            onClick={openAddModal}
+            className="rounded-xl bg-slate-900 text-white px-4 py-2 hover:bg-slate-800"
         >
-          + Tambah
+            + Tambah
         </button>
-      </div>
+        </div>
 
-      {/* TABLE */}
-      <MahasiswaTable
+        {/* TABLE */}
+        <MahasiswaTable
         mahasiswa={mahasiswa}
         openEditModal={openEditModal}
         onDelete={handleDelete}
-      />
+        />
 
-      {/* MODAL */}
-      <MahasiswaModal
+        {/* MODAL */}
+        <MahasiswaModal
         isModalOpen={isModalOpen}
         onClose={() => setModalOpen(false)}
         onSubmit={handleSubmit}
         selectedMahasiswa={selectedMahasiswa}
-      />
-    </div>
-  );
+        />
+        </div>
+    );
 }
