@@ -28,19 +28,35 @@ export default function AdminLayout() {
         </div>
       </div>
 
-      <nav className="p-4 space-y-1 text-sm">
+      <nav className="mt-6 space-y-2">
+        {/* MENU DASHBOARD */}
         <NavLink
           to="/admin/dashboard"
-          className={({ isActive }) => `${base} ${isActive ? active : ""}`}
+          className={({ isActive }) =>
+            `flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium ${
+              isActive
+                ? "bg-slate-900 text-white"
+                : "bg-slate-800/10 text-slate-100 hover:bg-slate-800/30"
+            }`
+          }
         >
-          <span>🏠</span> <span>Dashboard</span>
+          <span>🏠</span>
+          <span>Dashboard</span>
         </NavLink>
 
+        {/* MENU MAHASISWA */}
         <NavLink
           to="/admin/mahasiswa"
-          className={({ isActive }) => `${base} ${isActive ? active : ""}`}
+          className={({ isActive }) =>
+            `flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium ${
+              isActive
+                ? "bg-slate-900 text-white"
+                : "bg-slate-800/10 text-slate-100 hover:bg-slate-800/30"
+            }`
+          }
         >
-          <span>🎓</span> <span>Mahasiswa</span>
+          <span>🎓</span>
+          <span>Mahasiswa</span>
         </NavLink>
       </nav>
 

@@ -9,21 +9,20 @@ import ProtectedRoute from "./routes/ProtectedRoute.jsx";
 
 import Login from "./pages/login.jsx";
 import Dashboard from "./pages/admin/Dashboard.jsx";
-import MahasiswaList from "./pages/admin/MahasiswaList.jsx";
+import Mahasiswa from "./pages/admin/Mahasiswa.jsx";            // ← HALAMAN BARU
 import MahasiswaDetail from "./pages/admin/MahasiswaDetail.jsx";
 import PageNotFound from "./Error/PageNotFound.jsx";
 
 import "./App.css";
 
 const router = createBrowserRouter([
+  // redirect root ke /login
   { path: "/", element: <Navigate to="/login" replace /> },
 
   // Auth layout + login (public)
   {
     element: <AuthLayout />,
-    children: [
-      { path: "/login", element: <Login /> },
-    ],
+    children: [{ path: "/login", element: <Login /> }],
   },
 
   // Protected + Admin layout (nested)
@@ -32,11 +31,13 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/admin",
-        element: <AdminLayout />,
+        element: <AdminLayout />,           // ← DI SINI ADA SIDEBAR + HEADER
         children: [
           { index: true, element: <Navigate to="dashboard" replace /> },
           { path: "dashboard", element: <Dashboard /> },
-          { path: "mahasiswa", element: <MahasiswaList /> },
+
+          // ==== MAHASISWA (PAKAI FILE BARU) ====
+          { path: "mahasiswa", element: <Mahasiswa /> },
           { path: "mahasiswa/:id", element: <MahasiswaDetail /> },
         ],
       },
