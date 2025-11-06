@@ -1,28 +1,26 @@
-// src/Pages/admin/MahasiswaModal.jsx
 import { useEffect, useState } from "react";
 
 const initialForm = {
-    nim: "",
-    nama: "",
-    status: false,
+  nim: "",
+  nama: "",
+  status: false,
 };
 
 export default function MahasiswaModal({
-    isModalOpen,
-    onClose,
-    onSubmit,
-    selectedMahasiswa,
+  isModalOpen,
+  onClose,
+  onSubmit,
+  selectedMahasiswa,
 }) {
-    const [form, setForm] = useState(initialForm);
-    const [errors, setErrors] = useState({});
-
-  // kalau modal tidak dibuka → jangan render apa pun
-  if (!isModalOpen) return null;
+  const [form, setForm] = useState(initialForm);
+  const [errors, setErrors] = useState({});
 
   const isEditMode = !!selectedMahasiswa;
 
-  // useEffect: isi form saat selectedMahasiswa ada / tidak
+  // useEffect SELALU dipanggil, tapi logika di dalamnya cek isModalOpen
   useEffect(() => {
+    if (!isModalOpen) return; // kalau modal lagi tertutup, nggak usah ubah apa-apa
+
     if (selectedMahasiswa) {
       setForm({
         nim: selectedMahasiswa.nim || "",
@@ -32,7 +30,14 @@ export default function MahasiswaModal({
     } else {
       setForm(initialForm);
     }
-  }, [selectedMahasiswa, isModalOpen]);
+
+    setErrors({});
+  }, [isModalOpen, selectedMahasiswa]);
+
+  // setelah SEMUA hook, baru kita boleh return null
+  if (!isModalOpen) {
+    return null;
+  }
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -42,7 +47,6 @@ export default function MahasiswaModal({
     }));
   };
 
-  // validasi sederhana
   const validate = () => {
     const newErrors = {};
     if (!form.nim.trim()) newErrors.nim = "NIM wajib diisi.";
@@ -59,7 +63,6 @@ export default function MahasiswaModal({
       return;
     }
 
-    // kirim ke parent
     if (typeof onSubmit === "function") onSubmit(form);
     if (typeof onClose === "function") onClose();
   };
@@ -81,7 +84,7 @@ export default function MahasiswaModal({
               onChange={handleChange}
               className="mt-1 w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-200"
               placeholder="A11.2023.xxxxx"
-              readOnly={isEditMode} // update berdasarkan nim
+              readOnly={isEditMode}
             />
             {errors.nim && (
               <p className="mt-1 text-xs text-red-500">{errors.nim}</p>

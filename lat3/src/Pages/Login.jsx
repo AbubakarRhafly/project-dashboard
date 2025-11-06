@@ -37,9 +37,9 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+    <div className="min-h-screen bg-linear-to-b from-slate-50 to-white">
       {/* brand bar tipis */}
-      <div className="h-1 w-full bg-gradient-to-r from-slate-900/90 via-slate-700 to-slate-900/90" />
+      <div className="h-1 w-full bg-linear-to-r from-slate-900/90 via-slate-700 to-slate-900/90" />
 
       <div className="mx-auto grid min-h-[calc(100vh-4rem)] max-w-5xl place-items-center px-6 py-10">
         <section className="w-full overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-lg">
@@ -174,7 +174,7 @@ export default function Login() {
 
             {/* Panel kanan */}
             <div className="relative hidden md:block md:col-span-2">
-              <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-700" />
+              <div className="absolute inset-0 bg-linear-to-br from-slate-900 via-slate-800 to-slate-700" />
               <div
                 className="absolute inset-0 opacity-20"
                 style={{
