@@ -1,5 +1,7 @@
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { confirmLogout } from "../Utils/Helpers/SwalHelpers.jsx";
+import { toastSuccess } from "../Utils/Helpers/ToastHelpers.jsx";
 
 export default function AdminLayout() {
   const navigate = useNavigate();
@@ -10,10 +12,15 @@ export default function AdminLayout() {
     setOpen(false);
   }, [location.pathname]);
 
-  const logout = () => {
+  const logout = async () => {
+    const ok = await confirmLogout();
+    if (!ok) return;
+
     localStorage.removeItem("auth");
+    toastSuccess("Berhasil logout.");
     navigate("/login", { replace: true });
   };
+
 
   const base =
     "flex items-center gap-3 px-4 py-2 rounded-xl hover:bg-slate-100 transition";
@@ -33,10 +40,9 @@ export default function AdminLayout() {
         <NavLink
           to="/admin/dashboard"
           className={({ isActive }) =>
-            `flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium ${
-              isActive
-                ? "bg-slate-900 text-white"
-                : "bg-slate-800/10 text-slate-100 hover:bg-slate-800/30"
+            `flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium ${isActive
+              ? "bg-slate-900 text-white"
+              : "bg-slate-800/10 text-slate-100 hover:bg-slate-800/30"
             }`
           }
         >
@@ -48,10 +54,9 @@ export default function AdminLayout() {
         <NavLink
           to="/admin/mahasiswa"
           className={({ isActive }) =>
-            `flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium ${
-              isActive
-                ? "bg-slate-900 text-white"
-                : "bg-slate-800/10 text-slate-100 hover:bg-slate-800/30"
+            `flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium ${isActive
+              ? "bg-slate-900 text-white"
+              : "bg-slate-800/10 text-slate-100 hover:bg-slate-800/30"
             }`
           }
         >
@@ -78,22 +83,19 @@ export default function AdminLayout() {
 
       {/* Drawer Mobile */}
       <div
-        className={`fixed inset-0 z-40 md:hidden transition ${
-          open ? "pointer-events-auto" : "pointer-events-none"
-        }`}
+        className={`fixed inset-0 z-40 md:hidden transition ${open ? "pointer-events-auto" : "pointer-events-none"
+          }`}
       >
         {/* Backdrop */}
         <div
           onClick={() => setOpen(false)}
-          className={`absolute inset-0 bg-black/40 transition-opacity ${
-            open ? "opacity-100" : "opacity-0"
-          }`}
+          className={`absolute inset-0 bg-black/40 transition-opacity ${open ? "opacity-100" : "opacity-0"
+            }`}
         />
         {/* Panel */}
         <div
-          className={`absolute left-0 top-0 h-full w-72 bg-white border-r border-slate-200 transform transition-transform ${
-            open ? "translate-x-0" : "-translate-x-full"
-          }`}
+          className={`absolute left-0 top-0 h-full w-72 bg-white border-r border-slate-200 transform transition-transform ${open ? "translate-x-0" : "-translate-x-full"
+            }`}
         >
           {Sidebar}
         </div>

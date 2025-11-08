@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { dummyUser } from "../Data/Dummy.js";
+import { toastSuccess, toastError } from "../Utils/Helpers/ToastHelpers.jsx";
 
 export default function Login() {
   const [showPass, setShowPass] = useState(false);
@@ -24,6 +25,7 @@ export default function Login() {
     if (!ok) {
       setLoading(false);
       setErr("Email atau password salah.");
+      toastError("Login gagal: email atau password salah.");
       return;
     }
 
@@ -33,8 +35,10 @@ export default function Login() {
       JSON.stringify({ email: dummyUser.email, name: dummyUser.name, role: "admin" })
     );
 
+    toastSuccess("Login berhasil. Selamat datang kembali!");
     navigate("/admin", { replace: true });
   };
+
 
   return (
     <div className="min-h-screen bg-linear-to-b from-slate-50 to-white">

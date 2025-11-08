@@ -6,6 +6,7 @@ import AuthLayout from "./layouts/AuthLayout.jsx";
 import AdminLayout from "./layouts/AdminLayout.jsx";
 
 import ProtectedRoute from "./routes/ProtectedRoute.jsx";
+import { Toaster } from "react-hot-toast";
 
 import Login from "./pages/login.jsx";
 import Dashboard from "./pages/admin/Dashboard.jsx";
@@ -51,5 +52,7 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <RouterProvider router={router} />
+    <Toaster position="top-right" /> {/* Toast global */}
   </React.StrictMode>
 );
+
