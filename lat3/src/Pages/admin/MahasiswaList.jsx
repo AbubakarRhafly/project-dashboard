@@ -1,6 +1,7 @@
 // src/pages/admin/MahasiswaList.jsx
 import { useMemo, useState } from "react";
 import { mahasiswalist as seed } from "../../Data/Dummy.js";
+import { getAllMahasiswa, storeMahasiswa, updateMahasiswa, deleteMahasiswa } from "../../Utils/Apis/MahasiswaApi.jsx";
 
 export default function MahasiswaList() {
   // --- STATE

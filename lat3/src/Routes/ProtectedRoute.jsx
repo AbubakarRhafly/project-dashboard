@@ -5,11 +5,8 @@ export default function ProtectedRoute() {
   let authed = false;
   try {
     authed = !!JSON.parse(localStorage.getItem("auth") || "{}")?.email;
-  } catch { authed = false; }
+  } catch {}
 
-  return authed ? (
-    <Outlet />
-  ) : (
-    <Navigate to="/login" replace state={{ from: location }} />
-  );
+  if (!authed) return <Navigate to="/login" replace state={{ from: location }} />;
+  return <Outlet />;
 }

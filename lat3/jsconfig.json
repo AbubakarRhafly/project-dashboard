@@ -1,8 +1,16 @@
 {
     "compilerOptions": {
-    "jsx": "react-jsx",
-    "checkJs": false,
-    "forceConsistentCasingInFileNames": false
+        "jsx": "react-jsx",
+        "checkJs": false,
+        "paths": {
+            "@/*": [
+                "./src/*"
+            ]
+        },
+        "forceConsistentCasingInFileNames": false,
+        "ignoreDeprecations": "5.0"
     },
-    "include": ["src"]
+    "include": [
+        "src"
+    ]
 }

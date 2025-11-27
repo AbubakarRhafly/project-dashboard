@@ -1,1 +1,5 @@
+/* Tailwind v4 cukup satu baris ini */
 @import "tailwindcss";
+
+/* opsional: style globalmu */
+:root { color-scheme: light; }

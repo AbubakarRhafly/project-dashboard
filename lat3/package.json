@@ -4,13 +4,14 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "serve:db": "node ./merge-json.cjs && npx json-server --watch ./db.json --port 3001",
     "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "dev:all": "npx concurrently -k \"npm:serve:db\" \"npm:dev\""
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.14",
+    "axios": "^1.13.2",
+    "json-server": "^1.0.0-beta.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.9.4",

@@ -1,14 +1,35 @@
-import { useState } from "react";
-import "./App.css";
-import Login from "./pages/login.jsx";
-import Admin from "./pages/admin.jsx";
+// src/App.jsx
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import AuthLayout from "./layouts/AuthLayout.jsx";
+import AdminLayout from "./layouts/AdminLayout.jsx";
+import Login from "./pages/Login.jsx";
+import Dashboard from "./pages/admin/Dashboard.jsx";
+import Mahasiswa from "./pages/admin/Mahasiswa.jsx";
+import MahasiswaDetail from "./pages/admin/MahasiswaDetail.jsx";
 
 export default function App() {
-  const [isAuthed, setIsAuthed] = useState(false);
+  return (
+    <BrowserRouter>
+      <Routes>
+        {/* Auth */}
+        <Route element={<AuthLayout />}>
+          <Route index element={<Navigate to="/login" replace />} />
+          <Route path="/login" element={<Login />} />
+        </Route>
 
-  const handleLogin = ({ email, password }) => {
-    setIsAuthed(true);
-  };
+        {/* Admin */}
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<Navigate to="dashboard" replace />} />
+          <Route path="dashboard" element={<Dashboard />} />
 
-  return isAuthed ? <Admin /> : <Login onLogin={handleLogin} />;
+          {/* ⬇️ ini rutenya */}
+          <Route path="mahasiswa" element={<Mahasiswa />} />
+          <Route path="mahasiswa/:id" element={<MahasiswaDetail />} />
+        </Route>
+
+        {/* 404 */}
+        <Route path="*" element={<div>Page Not Found</div>} />
+      </Routes>
+    </BrowserRouter>
+  );
 }

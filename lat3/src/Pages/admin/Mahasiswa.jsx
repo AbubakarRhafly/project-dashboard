@@ -1,116 +1,169 @@
-import { useMemo, useState } from "react";
-import { mahasiswalist as seed } from "../../Data/Dummy.js";
-import { toastSuccess, toastError } from "../../Utils/Helpers/ToastHelpers.jsx";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-import MahasiswaModal from "./MahasiswaModal.jsx";
+// RELATIVE imports (hindari "@/")
 import MahasiswaTable from "./MahasiswaTable.jsx";
+import {
+    getAllMahasiswa,
+    storeMahasiswa,
+    updateMahasiswa,
+    deleteMahasiswa,
+} from "../../Utils/Apis/MahasiswaApi.jsx";
+
+// (opsional) jika pakai toast/swal
+// import { toastSuccess, toastError } from "../../Utils/Helpers/ToastHelpers.jsx";
+// import { confirmDelete, confirmUpdate } from "../../Utils/Helpers/SwalHelpers.jsx";
 
 export default function Mahasiswa() {
-    // state mahasiswa
-    const [mahasiswa, setMahasiswa] = useState(() => seed);
-    // state selected mahasiswa
-    const [selectedMahasiswa, setSelectedMahasiswa] = useState(null);
-    // state modal
+    const navigate = useNavigate();
+
+    const [mahasiswa, setMahasiswa] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    // modal & form sederhana (boleh digabung dengan modal milikmu)
     const [isModalOpen, setModalOpen] = useState(false);
+    const [mode, setMode] = useState("add"); // 'add' | 'edit'
+    const [form, setForm] = useState({ id: "", nim: "", nama: "" });
 
-    const total = useMemo(() => mahasiswa.length, [mahasiswa]);
-
-    // tambah mahasiswa baru
-    const storeMahasiswa = (data) => {
-        setMahasiswa((prev) => [...prev, data]);
+    // ---- fetch list
+    const fetchMahasiswa = async () => {
+        try {
+            setLoading(true);
+            const res = await getAllMahasiswa();
+            setMahasiswa(res.data || []);
+        } catch (e) {
+            console.error(e);
+            // toastError?.("Gagal memuat data");
+        } finally {
+            setLoading(false);
+        }
     };
 
-    // update mahasiswa dengan nim
-    const updateMahasiswa = (data) => {
-        setMahasiswa((prev) =>
-            prev.map((m) => (m.nim === data.nim ? { ...m, ...data } : m))
-        );
-    };
+    useEffect(() => {
+        fetchMahasiswa();
+    }, []);
 
-    // delete mahasiswa dengan nim
-    const deleteMahasiswa = (nim) => {
-        setMahasiswa((prev) => prev.filter((m) => m.nim !== nim));
-    };
-
-    // buka modal tambah
-    const openAddModal = () => {
-        setSelectedMahasiswa(null);
+    // ---- handlers
+    const openAdd = () => {
+        setMode("add");
+        setForm({ id: "", nim: "", nama: "" });
         setModalOpen(true);
     };
 
-    // buka modal edit, isi selectedMahasiswa dari nim
-    const openEditModal = (nim) => {
-        const found = mahasiswa.find((m) => m.nim === nim);
-        if (found) {
-            setSelectedMahasiswa(found);
-            setModalOpen(true);
+    const openEdit = (row) => {
+        setMode("edit");
+        // pastikan id ada (dari json-server)
+        setForm({ id: row.id, nim: row.nim ?? "", nama: row.nama ?? "" });
+        setModalOpen(true);
+    };
+
+    const handleDelete = async (id) => {
+        try {
+            await deleteMahasiswa(id);
+            // toastSuccess?.("Data berhasil dihapus");
+            fetchMahasiswa();
+        } catch (e) {
+            console.error(e);
+            // toastError?.("Gagal menghapus data");
         }
     };
 
-    // handle submit dari modal:
-    const handleSubmit = (formData) => {
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setForm((f) => ({ ...f, [name]: value }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!form.nim.trim() || !form.nama.trim()) {
+            alert("NIM dan Nama wajib diisi");
+            return;
+        }
+
         try {
-            if (selectedMahasiswa) {
-                updateMahasiswa(formData);
-                toastSuccess("Data mahasiswa berhasil diperbarui.");
+            if (mode === "add") {
+                // json-server akan buat id baru otomatis jika id tidak dikirim
+                await storeMahasiswa({ nim: form.nim, nama: form.nama });
+                // toastSuccess?.("Data berhasil ditambahkan");
             } else {
-                storeMahasiswa(formData);
-                toastSuccess("Data mahasiswa berhasil disimpan.");
+                await updateMahasiswa(form.id, { nim: form.nim, nama: form.nama });
+                // toastSuccess?.("Data berhasil diperbarui");
             }
-        } catch (error) {
-            console.error(error);
-            toastError("Terjadi kesalahan saat menyimpan data mahasiswa.");
+            setModalOpen(false);
+            fetchMahasiswa();
+        } catch (e) {
+            console.error(e);
+            // toastError?.("Operasi gagal");
         }
     };
 
-    // handle delete, terima nim
-    const handleDelete = (nim) => {
-        try {
-            deleteMahasiswa(nim);
-            toastSuccess("Data mahasiswa berhasil dihapus.");
-        } catch (error) {
-            console.error(error);
-            toastError("Terjadi kesalahan saat menghapus data mahasiswa.");
-        }
-    };
-
+    // ---- UI (jangan pernah return null supaya tidak terlihat blank)
     return (
         <div className="space-y-4">
-            {/* HEADER SAMA SEPERTI LIST LAMA */}
             <div className="flex items-center justify-between">
                 <div>
                     <h2 className="text-xl font-semibold">Mahasiswa</h2>
-                    <p className="text-slate-500 text-sm">
-                        Kelola data Mahasiswa (CRUD via state)
-                    </p>
-                    <p className="text-xs text-slate-400 mt-1">
-                        Total: <span className="font-medium text-slate-700">{total}</span>
-                    </p>
+                    <p className="text-slate-500 text-sm">CRUD via JSON-Server (axios)</p>
                 </div>
-
-                <button
-                    type="button"
-                    onClick={openAddModal}
-                    className="rounded-xl bg-slate-900 text-white px-4 py-2 hover:bg-slate-800"
-                >
+                <button type="button" onClick={openAdd}
+                    className="rounded-xl bg-slate-900 text-white px-4 py-2 hover:bg-slate-800">
                     + Tambah
                 </button>
             </div>
 
-            {/* TABLE */}
-            <MahasiswaTable
-                mahasiswa={mahasiswa}
-                openEditModal={openEditModal}
-                onDelete={handleDelete}
-            />
+            {loading ? (
+                <div className="p-6 text-sm text-slate-600">Memuat data…</div>
+            ) : (
+                <MahasiswaTable
+                    data={mahasiswa}
+                    onDetail={(id) => navigate(`/admin/mahasiswa/${id}`)}
+                    onEdit={openEdit}
+                    onDelete={handleDelete}
+                />
+            )}
 
-            {/* MODAL */}
-            <MahasiswaModal
-                isModalOpen={isModalOpen}
-                onClose={() => setModalOpen(false)}
-                onSubmit={handleSubmit}
-                selectedMahasiswa={selectedMahasiswa}
-            />
+            {/* Modal sederhana (boleh diganti komponen modal milikmu) */}
+            {isModalOpen && (
+                <div className="fixed inset-0 z-50 grid place-items-center bg-black/40">
+                    <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
+                        <h3 className="text-lg font-semibold mb-4">
+                            {mode === "add" ? "Tambah Mahasiswa" : "Edit Mahasiswa"}
+                        </h3>
+
+                        <form onSubmit={handleSubmit} className="space-y-4">
+                            <label className="block">
+                                <span className="text-sm text-slate-600">NIM</span>
+                                <input
+                                    name="nim" value={form.nim} onChange={handleChange}
+                                    className="mt-1 w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-200"
+                                    placeholder="A11.2020.xxxxx"
+                                />
+                            </label>
+
+                            <label className="block">
+                                <span className="text-sm text-slate-600">Nama</span>
+                                <input
+                                    name="nama" value={form.nama} onChange={handleChange}
+                                    className="mt-1 w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-200"
+                                    placeholder="Nama lengkap"
+                                />
+                            </label>
+
+                            <div className="flex justify-end gap-2 pt-2">
+                                <button type="button" onClick={() => setModalOpen(false)}
+                                    className="rounded-xl border px-4 py-2 hover:bg-slate-50">
+                                    Batal
+                                </button>
+                                <button type="submit"
+                                    className="rounded-xl bg-slate-900 text-white px-4 py-2 hover:bg-slate-800">
+                                    {mode === "add" ? "Simpan" : "Update"}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
