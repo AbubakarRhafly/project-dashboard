@@ -18,7 +18,7 @@ export default function JadwalTable({ data, onEdit, onDelete }) {
                     ) : data.map((row) => (
                         <tr key={row.id} className="border-t">
                             <td className="px-4 py-3">{row.id}</td>
-                            <td className="px-4 py-3">{row.kode}</td>
+                            <td className="px-4 py-3">{row.kodeMk}</td>
                             <td className="px-4 py-3">{row.hari}</td>
                             <td className="px-4 py-3">{row.jam}</td>
                             <td className="px-4 py-3">{row.ruang}</td>
