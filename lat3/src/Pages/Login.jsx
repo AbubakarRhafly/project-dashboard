@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { dummyUser } from "../Data/Dummy.js";
 import { toastSuccess, toastError } from "../Utils/Helpers/ToastHelpers.jsx";
+import { findUserByEmail } from "../Utils/Apis/UsersApi.jsx";
 
 export default function Login() {
   const [showPass, setShowPass] = useState(false);
@@ -9,36 +9,47 @@ export default function Login() {
   const [err, setErr] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setErr("");
-    const f = new FormData(e.currentTarget);
-    const email = f.get("email")?.trim().toLowerCase();
-    const password = f.get("password");
-
     setLoading(true);
 
-    const ok =
-      email === dummyUser.email.toLowerCase() &&
-      password === dummyUser.password;
+    try {
+      const f = new FormData(e.currentTarget);
+      const email = (f.get("email") || "").trim().toLowerCase();
+      const password = f.get("password") || "";
 
-    if (!ok) {
+      // Ambil user dari db/users.json via JSON-Server
+      const user = await findUserByEmail(email);
+
+      // Validasi ada user & password cocok (plain text sesuai contoh users.json)
+      if (!user || (user.password || "") !== password) {
+        setErr("Email atau password salah.");
+        toastError("Login gagal: email atau password salah.");
+        return;
+      }
+
+      // Simpan session (pastikan key 'auth' konsisten dgn ProtectedRoute)
+      localStorage.setItem(
+        "auth",
+        JSON.stringify({
+          email: user.email,
+          name: user.name,
+          role: user.role || "admin",
+          id: user.id,
+        })
+      );
+
+      toastSuccess("Login berhasil. Selamat datang kembali!");
+      navigate("/admin", { replace: true });
+    } catch (err) {
+      console.error(err);
+      setErr("Terjadi kesalahan saat login.");
+      toastError("Terjadi kesalahan koneksi ke server.");
+    } finally {
       setLoading(false);
-      setErr("Email atau password salah.");
-      toastError("Login gagal: email atau password salah.");
-      return;
     }
-
-    // simpan session (kunci harus sama dengan ProtectedRoute)
-    localStorage.setItem(
-      "auth",
-      JSON.stringify({ email: dummyUser.email, name: dummyUser.name, role: "admin" })
-    );
-
-    toastSuccess("Login berhasil. Selamat datang kembali!");
-    navigate("/admin", { replace: true });
   };
-
 
   return (
     <div className="min-h-screen bg-linear-to-b from-slate-50 to-white">
