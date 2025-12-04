@@ -1,0 +1,16 @@
+[
+    {
+        "id": 1,
+        "kode": "IF101",
+        "nama": "Algoritma",
+        "sks": 3,
+        "dosenId": 1
+    },
+    {
+        "id": 2,
+        "kode": "SI205",
+        "nama": "Basis Data",
+        "sks": 3,
+        "dosenId": 2
+    }
+]   

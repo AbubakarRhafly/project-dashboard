@@ -1,0 +1,37 @@
+[
+    {
+        "id": 1,
+        "kodeMk": "IF101",
+        "hari": "Senin",
+        "jam": "08:00",
+        "ruang": "D201"
+    },
+    {
+        "id": 2,
+        "kodeMk": "IF102",
+        "hari": "Rabu",
+        "jam": "10:00",
+        "ruang": "E105"
+    },
+    {
+        "id": 3,
+        "kodeMk": "IF201",
+        "hari": "Jumat",
+        "jam": "13:00",
+        "ruang": "Lab 2"
+    },
+    {
+        "id": 4,
+        "kodeMk": "IF301",
+        "hari": "Selasa",
+        "jam": "09:40",
+        "ruang": "C303"
+    },
+    {
+        "id": 5,
+        "kodeMk": "IF401",
+        "hari": "Kamis",
+        "jam": "15:30",
+        "ruang": "A101"
+    }
+]

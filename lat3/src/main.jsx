@@ -1,56 +1,46 @@
-// src/main.jsx
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
-import { Toaster } from "react-hot-toast";              // ⬅️ tambahkan
-
+import { Toaster } from "react-hot-toast";
 import "./App.css";
 
-// Layouts / Routes
-import AuthLayout from "./layouts/AuthLayout.jsx";
+// layouts
 import AdminLayout from "./layouts/AdminLayout.jsx";
-// import ProtectedRoute from "./Routes/ProtectedRoute.jsx"; // kalau belum ada, biarkan ter-comment
 
-// Pages
+// pages
+import Mahasiswa from "./pages/admin/Mahasiswa.jsx";
 import Login from "./pages/Login.jsx";
 import Dashboard from "./pages/admin/Dashboard.jsx";
-import Mahasiswa from "./pages/admin/Mahasiswa.jsx";
-import MahasiswaDetail from "./pages/admin/MahasiswaDetail.jsx";
-
-// (opsional) 404 page
-// import PageNotFound from "./Error/PageNotFound.jsx";
+import Dosen from "./pages/admin/Dosen.jsx";
+import MataKuliah from "./pages/admin/MataKuliah.jsx";
+import Jadwal from "./pages/admin/Jadwal.jsx";
 
 const router = createBrowserRouter([
-  // AUTH
   {
-    element: <AuthLayout />,
-    children: [
-      { index: true, element: <Navigate to="/login" replace /> },
-      { path: "/login", element: <Login /> },
-    ],
+    path: "/",
+    element: <Navigate to="/login" replace />,
   },
-
-  // ADMIN (tanpa guard; kalau punya ProtectedRoute, bungkus dengan element:<ProtectedRoute />)
+  {
+    path: "/login",
+    element: <Login />,
+  },
   {
     path: "/admin",
-    element: <AdminLayout />,
+    element: <AdminLayout />, // kalau punya ProtectedRoute -> bungkus di sana
     children: [
       { index: true, element: <Navigate to="dashboard" replace /> },
       { path: "dashboard", element: <Dashboard /> },
-
-      // ➜ Rute Mahasiswa
+      { path: "dosen", element: <Dosen /> },
+      { path: "matakuliah", element: <MataKuliah /> },
+      { path: "jadwal", element: <Jadwal /> },
       { path: "mahasiswa", element: <Mahasiswa /> },
-      { path: "mahasiswa/:id", element: <MahasiswaDetail /> },
     ],
   },
-
-  // fallback 404 (opsional)
-  // { path: "*", element: <PageNotFound /> },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
+    <Toaster position="top-right" />
     <RouterProvider router={router} />
-    <Toaster position="top-right" toastOptions={{ duration: 2500 }} /> {/* ⬅️ penting */}
   </React.StrictMode>
 );

@@ -1,0 +1,14 @@
+[
+    {
+        "id": 1,
+        "nidn": "12345678",
+        "nama": "Dr. Sinta",
+        "prodi": "Informatika"
+    },
+    {
+        "id": 2,
+        "nidn": "87654321",
+        "nama": "Ir. Rama",
+        "prodi": "Sistem Informasi"
+    }
+]
