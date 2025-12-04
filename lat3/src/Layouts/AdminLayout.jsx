@@ -38,7 +38,9 @@ export default function AdminLayout() {
         <NavLink
           to="/admin/dashboard"
           className={({ isActive }) =>
-            `flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium ${isActive ? "bg-slate-900 text-white" : "bg-slate-800/10 text-slate-100 hover:bg-slate-800/30"
+            `flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium ${isActive
+              ? "bg-indigo-600 text-white shadow-sm"
+              : "bg-white text-slate-700 border border-slate-200 hover:bg-indigo-50 hover:text-indigo-700"
             }`
           }
         >
@@ -50,7 +52,9 @@ export default function AdminLayout() {
         <NavLink
           to="/admin/mahasiswa"
           className={({ isActive }) =>
-            `flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium ${isActive ? "bg-slate-900 text-white" : "bg-slate-800/10 text-slate-100 hover:bg-slate-800/30"
+            `flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium ${isActive
+              ? "bg-indigo-600 text-white shadow-sm"
+              : "bg-white text-slate-700 border border-slate-200 hover:bg-indigo-50 hover:text-indigo-700"
             }`
           }
         >
@@ -62,7 +66,9 @@ export default function AdminLayout() {
         <NavLink
           to="/admin/dosen"
           className={({ isActive }) =>
-            `flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium ${isActive ? "bg-slate-900 text-white" : "bg-slate-800/10 text-slate-100 hover:bg-slate-800/30"
+            `flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium ${isActive
+              ? "bg-indigo-600 text-white shadow-sm"
+              : "bg-white text-slate-700 border border-slate-200 hover:bg-indigo-50 hover:text-indigo-700"
             }`
           }
         >
@@ -74,7 +80,9 @@ export default function AdminLayout() {
         <NavLink
           to="/admin/matakuliah"
           className={({ isActive }) =>
-            `flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium ${isActive ? "bg-slate-900 text-white" : "bg-slate-800/10 text-slate-100 hover:bg-slate-800/30"
+            `flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium ${isActive
+              ? "bg-indigo-600 text-white shadow-sm"
+              : "bg-white text-slate-700 border border-slate-200 hover:bg-indigo-50 hover:text-indigo-700"
             }`
           }
         >
@@ -86,7 +94,9 @@ export default function AdminLayout() {
         <NavLink
           to="/admin/jadwal"
           className={({ isActive }) =>
-            `flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium ${isActive ? "bg-slate-900 text-white" : "bg-slate-800/10 text-slate-100 hover:bg-slate-800/30"
+            `flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium ${isActive
+              ? "bg-indigo-600 text-white shadow-sm"
+              : "bg-white text-slate-700 border border-slate-200 hover:bg-indigo-50 hover:text-indigo-700"
             }`
           }
         >
