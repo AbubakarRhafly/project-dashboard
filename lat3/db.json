@@ -1,13 +1,4 @@
 {
-    "users": [
-        {
-            "id": 1,
-            "name": "Admin",
-            "email": "admin@mail.com",
-            "password": "admin123",
-            "role": "admin"
-        }
-    ],
     "dosen": [
         {
             "id": 1,
@@ -20,23 +11,6 @@
             "nidn": "87654321",
             "nama": "Ir. Rama",
             "prodi": "Sistem Informasi"
-        }
-    ],
-    "mahasiswa": [
-        {
-            "id": 1,
-            "nama": "Abubakar Rhafly Eka Putera",
-            "nim": "A11.2023.15240"
-        },
-        {
-            "id": 2,
-            "nama": "Della septi",
-            "nim": "A11.2023.12345"
-        },
-        {
-            "id": 3,
-            "nama": "Abu jibril Jizze",
-            "nim": "A11.2023.12345"
         }
     ],
     "jadwal": [
@@ -76,6 +50,23 @@
             "ruang": "A101"
         }
     ],
+    "mahasiswa": [
+        {
+            "id": 1,
+            "nama": "Abubakar Rhafly Eka Putera",
+            "nim": "A11.2023.15240"
+        },
+        {
+            "id": 2,
+            "nama": "Della septi",
+            "nim": "A11.2023.12345"
+        },
+        {
+            "id": 3,
+            "nama": "Abu jibril Jizze",
+            "nim": "A11.2023.12345"
+        }
+    ],
     "matakuliah": [
         {
             "id": 1,
@@ -90,6 +81,15 @@
             "nama": "Basis Data",
             "sks": 3,
             "dosenId": 2
+        }
+    ],
+    "users": [
+        {
+            "id": 1,
+            "name": "Admin",
+            "email": "admin@mail.com",
+            "password": "admin123",
+            "role": "admin"
         }
     ]
 }
