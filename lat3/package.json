@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "serve:db": "json-server --watch db.json --port 8001",
+    "merge:db": "node merge-json.js",
+    "serve:db": "npm run merge:db && json-server --watch db.json --port 8001",
     "dev": "vite",
     "dev:all": "npx concurrently -k \"npm:serve:db\" \"npm:dev\""
   },

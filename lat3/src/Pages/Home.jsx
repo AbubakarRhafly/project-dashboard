@@ -1,8 +1,3 @@
-// react itu bungkus HTML ke dalam JS
-// 1 file jsx itu punya 1 fuction utama
-// 1 fuction utama dinyatakan dengan Default
-// 1 function harus return 1 tag, tidak boleh lebih
-
 function Home() {
     return <div>
         <Judul />

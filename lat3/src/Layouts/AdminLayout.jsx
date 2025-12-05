@@ -1,4 +1,3 @@
-// src/layouts/AdminLayout.jsx
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { confirmLogout } from "../Utils/Helpers/SwalHelpers.jsx";
@@ -9,13 +8,11 @@ export default function AdminLayout() {
   const location = useLocation();
   const [open, setOpen] = useState(false);
 
-  // Tutup drawer ketika route berubah (mobile)
   useEffect(() => {
     setOpen(false);
   }, [location.pathname]);
 
   const logout = async () => {
-    // pastikan confirmLogout me-return Promise<boolean>
     const ok = await confirmLogout();
     if (!ok) return;
 

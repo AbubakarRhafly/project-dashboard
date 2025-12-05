@@ -26,7 +26,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: <AdminLayout />, // kalau punya ProtectedRoute -> bungkus di sana
+    element: <AdminLayout />,
     children: [
       { index: true, element: <Navigate to="dashboard" replace /> },
       { path: "dashboard", element: <Dashboard /> },
