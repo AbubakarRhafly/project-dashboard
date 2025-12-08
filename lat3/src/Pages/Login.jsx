@@ -37,6 +37,7 @@ export default function Login() {
           name: user.name,
           role: user.role || "admin",
           id: user.id,
+          permissions: Array.isArray(user.permissions) ? user.permissions : [],
         })
       );
 

@@ -1,13 +1,5 @@
 import toast from "react-hot-toast";
 
-export const toastSuccess = (message) => {
-    toast.success(message, { duration: 2500 });
-};
-
-export const toastError = (message) => {
-    toast.error(message, { duration: 3000 });
-};
-
-export const toastInfo = (message) => {
-    toast(message, { duration: 2500 });
-};
+export const toastSuccess = (msg) => toast.success(msg, { duration: 10000 });
+export const toastError = (msg) => toast.error(msg, { duration: 12000 });
+export const toastInfo = (msg) => toast(msg, { duration: 10000 });

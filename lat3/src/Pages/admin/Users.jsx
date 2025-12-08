@@ -1,12 +1,14 @@
-import { useEffect, useMemo, useState } from "react";
+// src/pages/admin/Users.jsx
+import { useEffect, useState } from "react";
 import { getUsers, updateUserRolePermissions } from "../../Utils/Apis/UsersApi.jsx";
 import { toastError, toastSuccess } from "../../Utils/Helpers/ToastHelpers.jsx";
 import { getAuth } from "../../Utils/Helpers/Authz.js";
 
+// Preset role → permission default
 const ROLE_PRESETS = {
     admin: {
         role: "admin",
-        permissions: ["*"],
+        permissions: ["*"], // nanti tetap kita expand ke ALL_PERMS
     },
     staff: {
         role: "staff",
@@ -18,6 +20,7 @@ const ROLE_PRESETS = {
     },
 };
 
+// Semua permission yang dipakai di sistem
 const ALL_PERMS = [
     "users.read",
     "users.write",
@@ -40,17 +43,16 @@ export default function Users() {
     const [role, setRole] = useState("viewer");
     const [perms, setPerms] = useState([]);
 
-    const canEditSelf = true; // bisa lu set false kalau mau larang
+    const auth = getAuth(); // user yang lagi login
 
-    const auth = useMemo(() => getAuth(), []);
-
+    // ambil semua user dari json-server
     const load = async () => {
         setLoading(true);
         try {
             const data = await getUsers();
             setRows(data);
-        } catch (e) {
-            console.error(e);
+        } catch (err) {
+            console.error(err);
             toastError("Gagal ambil data users.");
         } finally {
             setLoading(false);
@@ -61,23 +63,36 @@ export default function Users() {
         load();
     }, []);
 
-    const openEdit = (u) => {
-        setSelected(u);
-        setRole(u.role || "viewer");
-        setPerms(Array.isArray(u.permissions) ? u.permissions : []);
+    // buka modal edit
+    const openEdit = (user) => {
+        setSelected(user);
+        setRole(user.role || "viewer");
+        setPerms(Array.isArray(user.permissions) ? user.permissions : []);
         setOpen(true);
     };
 
-    const togglePerm = (p) => {
-        setPerms((prev) => (prev.includes(p) ? prev.filter((x) => x !== p) : [...prev, p]));
+    const closeModal = () => {
+        setOpen(false);
+        setSelected(null);
+        setRole("viewer");
+        setPerms([]);
+    };
+
+    const togglePerm = (perm) => {
+        setPerms((prev) =>
+            prev.includes(perm) ? prev.filter((p) => p !== perm) : [...prev, perm]
+        );
     };
 
     const applyRolePreset = (r) => {
         setRole(r);
+
         if (r === "admin") {
-            setPerms(ALL_PERMS); // admin full
+            // admin = full access
+            setPerms(ALL_PERMS);
             return;
         }
+
         const preset = ROLE_PRESETS[r];
         setPerms(preset ? preset.permissions : []);
     };
@@ -85,51 +100,48 @@ export default function Users() {
     const save = async () => {
         if (!selected) return;
 
-        // optional: larang edit diri sendiri
-        if (!canEditSelf && auth?.id === selected.id) {
-            toastError("Tidak boleh mengubah role akun yang sedang login.");
-            return;
-        }
+        const payload = {
+            role,
+            permissions: role === "admin" ? ALL_PERMS : perms,
+        };
 
         try {
-            const payload = {
-                role,
-                permissions: role === "admin" ? ALL_PERMS : perms,
-            };
-
             await updateUserRolePermissions(selected.id, payload);
             toastSuccess("Role & permission berhasil diupdate.");
-            setOpen(false);
-            setSelected(null);
-            await load();
 
-            // 🔥 kalau user yang diubah adalah yang sedang login → update localStorage juga
-            const current = getAuth();
-            if (current?.id === selected.id) {
+            // Kalau user yang diupdate adalah user yang lagi login → sync localStorage
+            if (auth && auth.id === selected.id) {
                 localStorage.setItem(
                     "auth",
                     JSON.stringify({
-                        ...current,
+                        ...auth,
                         role: payload.role,
                         permissions: payload.permissions,
                     })
                 );
             }
-        } catch (e) {
-            console.error(e);
+
+            await load();
+            closeModal();
+        } catch (err) {
+            console.error(err);
             toastError("Gagal mengupdate user.");
         }
     };
 
     return (
         <div className="space-y-4">
+            {/* Header */}
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                    <h2 className="text-xl font-semibold text-slate-900">User Management</h2>
-                    <p className="text-sm text-slate-500">Ubah role dan permission pada user.</p>
+                    <h1 className="text-lg font-semibold text-slate-900">Manajemen User</h1>
+                    <p className="text-sm text-slate-500">
+                        Ubah role dan permission user untuk mengatur akses fitur.
+                    </p>
                 </div>
             </div>
 
+            {/* Table */}
             <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="min-w-[900px] w-full text-sm">
@@ -145,9 +157,17 @@ export default function Users() {
                         </thead>
                         <tbody>
                             {loading ? (
-                                <tr><td colSpan={6} className="px-4 py-8 text-center text-slate-500">Loading...</td></tr>
+                                <tr>
+                                    <td colSpan={6} className="px-4 py-8 text-center text-slate-500">
+                                        Loading...
+                                    </td>
+                                </tr>
                             ) : rows.length === 0 ? (
-                                <tr><td colSpan={6} className="px-4 py-8 text-center text-slate-500">Tidak ada user</td></tr>
+                                <tr>
+                                    <td colSpan={6} className="px-4 py-8 text-center text-slate-500">
+                                        Tidak ada user
+                                    </td>
+                                </tr>
                             ) : (
                                 rows.map((u) => (
                                     <tr key={u.id} className="border-t">
@@ -179,7 +199,10 @@ export default function Users() {
             {/* Modal */}
             {open && selected && (
                 <div className="fixed inset-0 z-50 grid place-items-center p-4">
-                    <div className="absolute inset-0 bg-black/40" onClick={() => setOpen(false)} />
+                    <div
+                        className="absolute inset-0 bg-black/40"
+                        onClick={closeModal}
+                    />
                     <div className="relative w-full max-w-xl rounded-2xl bg-white shadow-lg border border-slate-200 max-h-[85vh] overflow-auto">
                         <div className="p-5 border-b">
                             <div className="font-semibold text-slate-900">Edit User</div>
@@ -187,6 +210,7 @@ export default function Users() {
                         </div>
 
                         <div className="p-5 space-y-4">
+                            {/* Role */}
                             <div>
                                 <label className="text-sm font-medium text-slate-700">Role</label>
                                 <select
@@ -198,14 +222,20 @@ export default function Users() {
                                     <option value="staff">staff</option>
                                     <option value="viewer">viewer</option>
                                 </select>
-                                <p className="mt-1 text-xs text-slate-500">Memilih role bisa auto-set permission.</p>
+                                <p className="mt-1 text-xs text-slate-500">
+                                    Mengubah role akan mengisi permission secara otomatis (bisa di-edit lagi).
+                                </p>
                             </div>
 
+                            {/* Permissions */}
                             <div>
                                 <label className="text-sm font-medium text-slate-700">Permissions</label>
                                 <div className="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2">
                                     {ALL_PERMS.map((p) => (
-                                        <label key={p} className="flex items-center gap-2 rounded-xl border p-3">
+                                        <label
+                                            key={p}
+                                            className="flex items-center gap-2 rounded-xl border px-3 py-2"
+                                        >
                                             <input
                                                 type="checkbox"
                                                 checked={role === "admin" ? true : perms.includes(p)}
@@ -221,7 +251,7 @@ export default function Users() {
 
                         <div className="p-5 border-t flex items-center justify-end gap-2">
                             <button
-                                onClick={() => setOpen(false)}
+                                onClick={closeModal}
                                 className="rounded-xl border px-4 py-2 hover:bg-slate-50"
                             >
                                 Batal

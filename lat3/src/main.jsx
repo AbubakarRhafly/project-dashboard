@@ -14,6 +14,7 @@ import Dashboard from "./pages/admin/Dashboard.jsx";
 import Dosen from "./pages/admin/Dosen.jsx";
 import MataKuliah from "./pages/admin/MataKuliah.jsx";
 import Jadwal from "./pages/admin/Jadwal.jsx";
+import Users from "./pages/admin/Users.jsx";
 
 const router = createBrowserRouter([
   {
@@ -34,13 +35,28 @@ const router = createBrowserRouter([
       { path: "matakuliah", element: <MataKuliah /> },
       { path: "jadwal", element: <Jadwal /> },
       { path: "mahasiswa", element: <Mahasiswa /> },
+      { path: "users", element: <Users /> },
     ],
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <Toaster position="top-right" />
+    <Toaster
+      position="top-right"
+      gutter={12}
+      toastOptions={{
+        // bikin lama banget biar gampang SS 😄
+        duration: 12000, // 12 detik default
+        success: { duration: 9000 },
+        error: { duration: 12000 },
+        style: {
+          zIndex: 999999,
+          fontSize: "14px",
+          padding: "12px 14px",
+        },
+      }}
+    />
     <RouterProvider router={router} />
   </React.StrictMode>
 );

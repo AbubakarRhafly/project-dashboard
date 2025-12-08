@@ -4,6 +4,32 @@
         "name": "Admin",
         "email": "admin@mail.com",
         "password": "admin123",
-        "role": "admin"
+        "role": "admin",
+        "permissions": [
+            "users.read",
+            "users.write",
+            "mahasiswa.read",
+            "mahasiswa.write",
+            "dosen.read",
+            "dosen.write",
+            "matakuliah.read",
+            "matakuliah.write",
+            "jadwal.read",
+            "jadwal.write"
+        ]
+    },
+    {
+        "id": 2,
+        "name": "Staff",
+        "email": "staff@mail.com",
+        "password": "staff123",
+        "role": "staff",
+        "permissions": [
+            "mahasiswa.read",
+            "mahasiswa.write",
+            "dosen.read",
+            "matakuliah.read",
+            "jadwal.read"
+        ]
     }
 ]

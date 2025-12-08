@@ -22,10 +22,9 @@ export default function AdminLayout() {
   };
 
   const linkClass = ({ isActive }) =>
-    `flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition ${
-      isActive
-        ? "bg-indigo-600 text-white shadow-sm"
-        : "bg-white text-slate-700 border border-slate-200 hover:bg-indigo-50 hover:text-indigo-700"
+    `flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition ${isActive
+      ? "bg-indigo-600 text-white shadow-sm"
+      : "bg-white text-slate-700 border border-slate-200 hover:bg-indigo-50 hover:text-indigo-700"
     }`;
 
   const Sidebar = (
@@ -65,6 +64,11 @@ export default function AdminLayout() {
           <span>🗓️</span>
           <span>Jadwal</span>
         </NavLink>
+
+        <NavLink to="/admin/users" className={linkClass}>
+          <span>👥</span>
+          <span>Users</span>
+        </NavLink>
       </nav>
 
       <div className="mt-auto p-4 border-t border-slate-200">
@@ -85,22 +89,19 @@ export default function AdminLayout() {
 
       {/* Drawer Mobile */}
       <div
-        className={`fixed inset-0 z-40 md:hidden ${
-          open ? "pointer-events-auto" : "pointer-events-none"
-        }`}
+        className={`fixed inset-0 z-40 md:hidden ${open ? "pointer-events-auto" : "pointer-events-none"
+          }`}
       >
         {/* Backdrop */}
         <div
           onClick={() => setOpen(false)}
-          className={`absolute inset-0 bg-black/40 transition-opacity ${
-            open ? "opacity-100" : "opacity-0"
-          }`}
+          className={`absolute inset-0 bg-black/40 transition-opacity ${open ? "opacity-100" : "opacity-0"
+            }`}
         />
         {/* Panel */}
         <div
-          className={`absolute left-0 top-0 h-full w-72 transform transition-transform duration-200 ease-out ${
-            open ? "translate-x-0" : "-translate-x-full"
-          }`}
+          className={`absolute left-0 top-0 h-full w-72 transform transition-transform duration-200 ease-out ${open ? "translate-x-0" : "-translate-x-full"
+            }`}
           role="dialog"
           aria-modal="true"
         >
