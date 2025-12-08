@@ -11,6 +11,12 @@
       "nidn": "87654321",
       "nama": "Ir. Rama",
       "prodi": "Sistem Informasi"
+    },
+    {
+      "nidn": "27162500",
+      "nama": "Takeru oda",
+      "prodi": "Sistem Terdistribusi",
+      "id": "d168"
     }
   ],
   "jadwal": [
@@ -48,6 +54,13 @@
       "hari": "Kamis",
       "jam": "15:30",
       "ruang": "A101"
+    },
+    {
+      "kode": "IF103",
+      "hari": "Senin",
+      "jam": "10:20-12:00",
+      "ruang": "H101",
+      "id": "c81e"
     }
   ],
   "mahasiswa": [
