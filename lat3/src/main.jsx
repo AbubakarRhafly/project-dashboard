@@ -43,20 +43,10 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Toaster
-      position="top-right"
-      gutter={12}
-      toastOptions={{
-        // bikin lama banget biar gampang SS 😄
-        duration: 12000, // 12 detik default
-        success: { duration: 9000 },
-        error: { duration: 12000 },
-        style: {
-          zIndex: 999999,
-          fontSize: "14px",
-          padding: "12px 14px",
-        },
-      }}
-    />
+        position="top-right"
+        toastOptions={{ duration: 8000 }}
+        containerStyle={{ zIndex: 999999, top: 16, right: 16 }}
+      />
     <RouterProvider router={router} />
   </React.StrictMode>
 );

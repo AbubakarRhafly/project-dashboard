@@ -11,12 +11,6 @@
       "nidn": "87654321",
       "nama": "Ir. Rama",
       "prodi": "Sistem Informasi"
-    },
-    {
-      "id": "dd2c",
-      "nidn": "27162500",
-      "nama": "Takeru oda",
-      "prodi": "Sistem Terdistribusi"
     }
   ],
   "jadwal": [
@@ -120,7 +114,8 @@
         "mahasiswa.write",
         "dosen.read",
         "matakuliah.read",
-        "jadwal.read"
+        "jadwal.read",
+        "users.write"
       ]
     }
   ]

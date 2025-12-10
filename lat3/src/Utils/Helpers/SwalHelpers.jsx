@@ -12,23 +12,28 @@ export const confirmLogout = async () => {
 };
 
 export const confirmDelete = async () => {
-    const r = await Swal.fire({
-        title: "Hapus data ini?",
+    const res = await Swal.fire({
+        title: "Hapus data?",
+        text: "Aksi ini tidak bisa dibatalkan.",
         icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Ya, hapus",
         cancelButtonText: "Batal",
+        reverseButtons: true,
+        focusCancel: true,
     });
-    return r.isConfirmed;
+    return res.isConfirmed;
 };
 
 export const confirmUpdate = async () => {
-    const r = await Swal.fire({
+    const res = await Swal.fire({
         title: "Simpan perubahan?",
         icon: "question",
         showCancelButton: true,
         confirmButtonText: "Ya, simpan",
         cancelButtonText: "Batal",
+        reverseButtons: true,
+        focusCancel: true,
     });
-    return r.isConfirmed;
+    return res.isConfirmed;
 };

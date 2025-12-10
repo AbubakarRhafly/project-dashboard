@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { getUsers, updateUserRolePermissions } from "../../Utils/Apis/UsersApi.jsx";
 import { toastError, toastSuccess } from "../../Utils/Helpers/ToastHelpers.jsx";
+import { confirmUpdate } from "../../Utils/Helpers/SwalHelpers.jsx";
 import { getAuth } from "../../Utils/Helpers/Authz.js";
 
 // Preset role → permission default
@@ -100,6 +101,9 @@ export default function Users() {
     const save = async () => {
         if (!selected) return;
 
+        const ok = await confirmUpdate();   // ✅ konfirmasi dulu
+        if (!ok) return;
+
         const payload = {
             role,
             permissions: role === "admin" ? ALL_PERMS : perms,
@@ -109,15 +113,10 @@ export default function Users() {
             await updateUserRolePermissions(selected.id, payload);
             toastSuccess("Role & permission berhasil diupdate.");
 
-            // Kalau user yang diupdate adalah user yang lagi login → sync localStorage
             if (auth && auth.id === selected.id) {
                 localStorage.setItem(
                     "auth",
-                    JSON.stringify({
-                        ...auth,
-                        role: payload.role,
-                        permissions: payload.permissions,
-                    })
+                    JSON.stringify({ ...auth, role: payload.role, permissions: payload.permissions })
                 );
             }
 
