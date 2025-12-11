@@ -1,7 +1,5 @@
-// src/Utils/Apis/UsersApi.jsx
 import axios from "../AxiosInstance";
 
-// Ambil semua user
 export const getUsers = async () => {
     const res = await axios.get("/users");
     return res.data;
@@ -14,10 +12,8 @@ export const updateUserRolePermissions = async (id, payload) => {
     return res.data;
 };
 
-// Dipakai di Login.jsx
+//Login.jsx
 export async function findUserByEmail(emailLower) {
-    // json-server bisa filter: /users?email=...
     const res = await axios.get("/users", { params: { email: emailLower } });
-    // json-server mengembalikan array
     return Array.isArray(res.data) && res.data.length ? res.data[0] : null;
 }

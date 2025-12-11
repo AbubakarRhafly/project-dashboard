@@ -115,7 +115,9 @@
         "dosen.read",
         "matakuliah.read",
         "jadwal.read",
-        "users.write"
+        "jadwal.write",
+        "dosen.write",
+        "matakuliah.write"
       ]
     }
   ]

@@ -43,10 +43,8 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Toaster
-        position="top-right"
-        toastOptions={{ duration: 8000 }}
-        containerStyle={{ zIndex: 999999, top: 16, right: 16 }}
-      />
+      position="top-right"
+    />
     <RouterProvider router={router} />
   </React.StrictMode>
 );
