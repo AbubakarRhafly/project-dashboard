@@ -1,49 +1,29 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-// RELATIVE imports (hindari "@/")
 import MahasiswaTable from "./MahasiswaTable.jsx";
 import {
-    getAllMahasiswa,
-    storeMahasiswa,
-    updateMahasiswa,
-    deleteMahasiswa,
-} from "../../Utils/Apis/MahasiswaApi.jsx";
+    useMahasiswa,
+    useStoreMahasiswa,
+    useUpdateMahasiswa,
+    useDeleteMahasiswa,
+} from "../../Utils/Hooks/useMahasiswa.jsx";
 
-// (opsional) jika pakai toast/swal
-// import { toastSuccess, toastError } from "../../Utils/Helpers/ToastHelpers.jsx";
-// import { confirmDelete, confirmUpdate } from "../../Utils/Helpers/SwalHelpers.jsx";
+import { toastError } from "../../Utils/Helpers/ToastHelpers.jsx";
+import { confirmDelete, confirmUpdate } from "../../Utils/Helpers/SwalHelpers.jsx";
 
 export default function Mahasiswa() {
     const navigate = useNavigate();
 
-    const [mahasiswa, setMahasiswa] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const { data: mahasiswa = [], isLoading: loading } = useMahasiswa();
+    const { mutate: store } = useStoreMahasiswa();
+    const { mutate: update } = useUpdateMahasiswa();
+    const { mutate: remove } = useDeleteMahasiswa();
 
-    // modal & form sederhana (boleh digabung dengan modal milikmu)
     const [isModalOpen, setModalOpen] = useState(false);
-    const [mode, setMode] = useState("add"); // 'add' | 'edit'
+    const [mode, setMode] = useState("add"); // add | edit
     const [form, setForm] = useState({ id: "", nim: "", nama: "" });
 
-    // ---- fetch list
-    const fetchMahasiswa = async () => {
-        try {
-            setLoading(true);
-            const res = await getAllMahasiswa();
-            setMahasiswa(res.data || []);
-        } catch (e) {
-            console.error(e);
-            // toastError?.("Gagal memuat data");
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        fetchMahasiswa();
-    }, []);
-
-    // ---- handlers
     const openAdd = () => {
         setMode("add");
         setForm({ id: "", nim: "", nama: "" });
@@ -52,20 +32,14 @@ export default function Mahasiswa() {
 
     const openEdit = (row) => {
         setMode("edit");
-        // pastikan id ada (dari json-server)
         setForm({ id: row.id, nim: row.nim ?? "", nama: row.nama ?? "" });
         setModalOpen(true);
     };
 
     const handleDelete = async (id) => {
-        try {
-            await deleteMahasiswa(id);
-            // toastSuccess?.("Data berhasil dihapus");
-            fetchMahasiswa();
-        } catch (e) {
-            console.error(e);
-            // toastError?.("Gagal menghapus data");
-        }
+        const ok = await confirmDelete();
+        if (!ok) return;
+        remove(id);
     };
 
     const handleChange = (e) => {
@@ -77,37 +51,45 @@ export default function Mahasiswa() {
         e.preventDefault();
 
         if (!form.nim.trim() || !form.nama.trim()) {
-            alert("NIM dan Nama wajib diisi");
+            toastError("NIM dan Nama wajib diisi");
             return;
         }
 
-        try {
-            if (mode === "add") {
-                // json-server akan buat id baru otomatis jika id tidak dikirim
-                await storeMahasiswa({ nim: form.nim, nama: form.nama });
-                // toastSuccess?.("Data berhasil ditambahkan");
-            } else {
-                await updateMahasiswa(form.id, { nim: form.nim, nama: form.nama });
-                // toastSuccess?.("Data berhasil diperbarui");
+        if (mode === "add") {
+            const exists = mahasiswa.find((m) => m.nim === form.nim);
+            if (exists) {
+                toastError("NIM sudah terdaftar!");
+                return;
             }
-            setModalOpen(false);
-            fetchMahasiswa();
-        } catch (e) {
-            console.error(e);
-            // toastError?.("Operasi gagal");
+
+            store(
+                { nim: form.nim, nama: form.nama },
+                { onSuccess: () => setModalOpen(false) }
+            );
+            return;
         }
+
+        const ok = await confirmUpdate();
+        if (!ok) return;
+
+        update(
+            { id: form.id, data: { nim: form.nim, nama: form.nama } },
+            { onSuccess: () => setModalOpen(false) }
+        );
     };
 
-    // ---- UI (jangan pernah return null supaya tidak terlihat blank)
     return (
         <div className="space-y-4">
             <div className="flex items-center justify-between">
                 <div>
                     <h2 className="text-xl font-semibold">Mahasiswa</h2>
-                    <p className="text-slate-500 text-sm">CRUD via JSON-Server (axios)</p>
+                    <p className="text-slate-500 text-sm">CRUD via React Query</p>
                 </div>
-                <button type="button" onClick={openAdd}
-                    className="rounded-xl bg-slate-900 text-white px-4 py-2 hover:bg-slate-800">
+                <button
+                    type="button"
+                    onClick={openAdd}
+                    className="rounded-xl bg-slate-900 text-white px-4 py-2 hover:bg-slate-800"
+                >
                     + Tambah
                 </button>
             </div>
@@ -123,7 +105,6 @@ export default function Mahasiswa() {
                 />
             )}
 
-            {/* Modal sederhana (boleh diganti komponen modal milikmu) */}
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 grid place-items-center bg-black/40">
                     <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
@@ -135,28 +116,35 @@ export default function Mahasiswa() {
                             <label className="block">
                                 <span className="text-sm text-slate-600">NIM</span>
                                 <input
-                                    name="nim" value={form.nim} onChange={handleChange}
+                                    name="nim"
+                                    value={form.nim}
+                                    onChange={handleChange}
                                     className="mt-1 w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-200"
-                                    placeholder="A11.2020.xxxxx"
                                 />
                             </label>
 
                             <label className="block">
                                 <span className="text-sm text-slate-600">Nama</span>
                                 <input
-                                    name="nama" value={form.nama} onChange={handleChange}
+                                    name="nama"
+                                    value={form.nama}
+                                    onChange={handleChange}
                                     className="mt-1 w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-200"
-                                    placeholder="Nama lengkap"
                                 />
                             </label>
 
                             <div className="flex justify-end gap-2 pt-2">
-                                <button type="button" onClick={() => setModalOpen(false)}
-                                    className="rounded-xl border px-4 py-2 hover:bg-slate-50">
+                                <button
+                                    type="button"
+                                    onClick={() => setModalOpen(false)}
+                                    className="rounded-xl border px-4 py-2 hover:bg-slate-50"
+                                >
                                     Batal
                                 </button>
-                                <button type="submit"
-                                    className="rounded-xl bg-slate-900 text-white px-4 py-2 hover:bg-slate-800">
+                                <button
+                                    type="submit"
+                                    className="rounded-xl bg-slate-900 text-white px-4 py-2 hover:bg-slate-800"
+                                >
                                     {mode === "add" ? "Simpan" : "Update"}
                                 </button>
                             </div>

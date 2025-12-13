@@ -1,65 +1,96 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import MataKuliahTable from "./MataKuliahTable.jsx";
+
 import {
-    getAllMataKuliah, storeMataKuliah, updateMataKuliah, deleteMataKuliah
-} from "../../Utils/Apis/MataKuliahApi.jsx";
+    useMataKuliah,
+    useStoreMataKuliah,
+    useUpdateMataKuliah,
+    useDeleteMataKuliah,
+} from "../../Utils/Hooks/useMataKuliah.jsx";
+
 import { confirmDelete, confirmUpdate } from "../../Utils/Helpers/SwalHelpers.jsx";
-import { toastSuccess, toastError } from "../../Utils/Helpers/ToastHelpers.jsx";
+import { toastError } from "../../Utils/Helpers/ToastHelpers.jsx";
 
 export default function MataKuliah() {
-    const [rows, setRows] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const { data: rows = [], isLoading: loading } = useMataKuliah();
+    const { mutate: store } = useStoreMataKuliah();
+    const { mutate: update } = useUpdateMataKuliah();
+    const { mutate: remove } = useDeleteMataKuliah();
 
     const [isModalOpen, setModalOpen] = useState(false);
-    const [mode, setMode] = useState("add");
-    const [form, setForm] = useState({ id: "", kode: "", nama: "", sks: 0 });
+    const [mode, setMode] = useState("add"); // add | edit
+    const [form, setForm] = useState({
+        id: "",
+        kode: "",
+        nama: "",
+        sks: "",
+    });
 
-    const fetchRows = async () => {
-        try {
-            setLoading(true);
-            const res = await getAllMataKuliah();
-            setRows(res.data || []);
-        } catch (e) {
-            console.error(e);
-            toastError("Gagal memuat data mata kuliah");
-        } finally {
-            setLoading(false);
-        }
+    const openAdd = () => {
+        setMode("add");
+        setForm({ id: "", kode: "", nama: "", sks: "" });
+        setModalOpen(true);
     };
-    useEffect(() => { fetchRows(); }, []);
 
-    const openAdd = () => { setMode("add"); setForm({ id: "", kode: "", nama: "", sks: 0 }); setModalOpen(true); };
-    const openEdit = (row) => { setMode("edit"); setForm({ id: row.id, kode: row.kode ?? "", nama: row.nama ?? "", sks: row.sks ?? 0 }); setModalOpen(true); };
+    const openEdit = (row) => {
+        setMode("edit");
+        setForm({
+            id: row.id,
+            kode: row.kode ?? "",
+            nama: row.nama ?? "",
+            sks: String(row.sks ?? ""),
+        });
+        setModalOpen(true);
+    };
 
     const handleDelete = async (id) => {
-        try {
-            const ok = await confirmDelete(); if (!ok) return;
-            await deleteMataKuliah(id);
-            toastSuccess("Data terhapus");
-            fetchRows();
-        } catch (e) { console.error(e); toastError("Gagal menghapus"); }
+        const ok = await confirmDelete();
+        if (!ok) return;
+        remove(id);
     };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setForm((f) => ({ ...f, [name]: name === "sks" ? Number(value) : value }));
+        setForm((f) => ({ ...f, [name]: value }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!form.kode.trim() || !form.nama.trim()) { toastError("Kode & Nama wajib diisi"); return; }
-        try {
-            if (mode === "edit") {
-                const ok = await confirmUpdate(); if (!ok) return;
-                await updateMataKuliah(form.id, { kode: form.kode, nama: form.nama, sks: form.sks });
-                toastSuccess("Berhasil diperbarui");
-            } else {
-                await storeMataKuliah({ kode: form.kode, nama: form.nama, sks: form.sks });
-                toastSuccess("Berhasil ditambahkan");
+
+        if (!form.kode.trim() || !form.nama.trim() || !String(form.sks).trim()) {
+            toastError("Kode, Nama, dan SKS wajib diisi");
+            return;
+        }
+
+        // sks numeric
+        const sksNum = Number(form.sks);
+        if (Number.isNaN(sksNum) || sksNum <= 0) {
+            toastError("SKS harus angka > 0");
+            return;
+        }
+
+        if (mode === "add") {
+            // optional: cek kode unik
+            const exists = rows.find((m) => String(m.kode) === String(form.kode));
+            if (exists) {
+                toastError("Kode mata kuliah sudah terdaftar!");
+                return;
             }
-            setModalOpen(false);
-            fetchRows();
-        } catch (e) { console.error(e); toastError("Operasi gagal"); }
+
+            store(
+                { kode: form.kode, nama: form.nama, sks: sksNum },
+                { onSuccess: () => setModalOpen(false) }
+            );
+            return;
+        }
+
+        const ok = await confirmUpdate();
+        if (!ok) return;
+
+        update(
+            { id: form.id, data: { kode: form.kode, nama: form.nama, sks: sksNum } },
+            { onSuccess: () => setModalOpen(false) }
+        );
     };
 
     return (
@@ -67,9 +98,16 @@ export default function MataKuliah() {
             <div className="flex items-center justify-between">
                 <div>
                     <h2 className="text-xl font-semibold">Mata Kuliah</h2>
-                    <p className="text-slate-500 text-sm">CRUD via JSON-Server (axios)</p>
+                    <p className="text-slate-500 text-sm">CRUD via React Query</p>
                 </div>
-                <button type="button" onClick={openAdd} className="rounded-xl bg-slate-900 text-white px-4 py-2 hover:bg-slate-800">+ Tambah</button>
+
+                <button
+                    type="button"
+                    onClick={openAdd}
+                    className="rounded-xl bg-slate-900 text-white px-4 py-2 hover:bg-slate-800"
+                >
+                    + Tambah
+                </button>
             </div>
 
             {loading ? (
@@ -81,27 +119,54 @@ export default function MataKuliah() {
             {isModalOpen && (
                 <div className="fixed inset-0 z-50 grid place-items-center bg-black/40">
                     <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
-                        <h3 className="text-lg font-semibold mb-4">{mode === "add" ? "Tambah Mata Kuliah" : "Edit Mata Kuliah"}</h3>
+                        <h3 className="text-lg font-semibold mb-4">
+                            {mode === "add" ? "Tambah Mata Kuliah" : "Edit Mata Kuliah"}
+                        </h3>
+
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <label className="block">
-                                <span className="text-sm text-slate-600">Kode MK</span>
-                                <input name="kode" value={form.kode} onChange={handleChange}
-                                    className="mt-1 w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-200" />
+                                <span className="text-sm text-slate-600">Kode</span>
+                                <input
+                                    name="kode"
+                                    value={form.kode}
+                                    onChange={handleChange}
+                                    className="mt-1 w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-200"
+                                />
                             </label>
+
                             <label className="block">
-                                <span className="text-sm text-slate-600">Nama MK</span>
-                                <input name="nama" value={form.nama} onChange={handleChange}
-                                    className="mt-1 w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-200" />
+                                <span className="text-sm text-slate-600">Nama</span>
+                                <input
+                                    name="nama"
+                                    value={form.nama}
+                                    onChange={handleChange}
+                                    className="mt-1 w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-200"
+                                />
                             </label>
+
                             <label className="block">
                                 <span className="text-sm text-slate-600">SKS</span>
-                                <input type="number" min="0" name="sks" value={form.sks} onChange={handleChange}
-                                    className="mt-1 w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-200" />
+                                <input
+                                    name="sks"
+                                    value={form.sks}
+                                    onChange={handleChange}
+                                    className="mt-1 w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-slate-200"
+                                    inputMode="numeric"
+                                />
                             </label>
 
                             <div className="flex justify-end gap-2 pt-2">
-                                <button type="button" onClick={() => setModalOpen(false)} className="rounded-xl border px-4 py-2 hover:bg-slate-50">Batal</button>
-                                <button type="submit" className="rounded-xl bg-slate-900 text-white px-4 py-2 hover:bg-slate-800">
+                                <button
+                                    type="button"
+                                    onClick={() => setModalOpen(false)}
+                                    className="rounded-xl border px-4 py-2 hover:bg-slate-50"
+                                >
+                                    Batal
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="rounded-xl bg-slate-900 text-white px-4 py-2 hover:bg-slate-800"
+                                >
                                     {mode === "add" ? "Simpan" : "Update"}
                                 </button>
                             </div>

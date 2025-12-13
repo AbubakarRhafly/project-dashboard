@@ -52,9 +52,9 @@
   ],
   "mahasiswa": [
     {
-      "id": "1",
+      "nim": "A11.2023.15240",
       "nama": "Abubakar Rhafly Eka Putera",
-      "nim": "A11.2023.15240"
+      "id": "1"
     },
     {
       "id": "2",
@@ -114,10 +114,7 @@
         "mahasiswa.write",
         "dosen.read",
         "matakuliah.read",
-        "jadwal.read",
-        "jadwal.write",
-        "dosen.write",
-        "matakuliah.write"
+        "jadwal.read"
       ]
     }
   ]

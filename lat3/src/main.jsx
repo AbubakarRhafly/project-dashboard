@@ -4,6 +4,10 @@ import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom"
 import { Toaster } from "react-hot-toast";
 import "./App.css";
 
+// React Query
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
 // layouts
 import AdminLayout from "./layouts/AdminLayout.jsx";
 
@@ -17,14 +21,8 @@ import Jadwal from "./pages/admin/Jadwal.jsx";
 import Users from "./pages/admin/Users.jsx";
 
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Navigate to="/login" replace />,
-  },
-  {
-    path: "/login",
-    element: <Login />,
-  },
+  { path: "/", element: <Navigate to="/login" replace /> },
+  { path: "/login", element: <Login /> },
   {
     path: "/admin",
     element: <AdminLayout />,
@@ -40,11 +38,16 @@ const router = createBrowserRouter([
   },
 ]);
 
+const queryClient = new QueryClient();
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <Toaster
-      position="top-right"
-    />
-    <RouterProvider router={router} />
+    <QueryClientProvider client={queryClient}>
+      <Toaster position="top-right" />
+      <RouterProvider router={router} />
+
+      {/* Opsional: buat ngecek query/mutation */}
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   </React.StrictMode>
 );
