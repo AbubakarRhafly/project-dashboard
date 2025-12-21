@@ -12,8 +12,9 @@ export const useMahasiswa = () =>
     useQuery({
         queryKey: ["mahasiswa"],
         queryFn: getAllMahasiswa,
-        select: (res) => res?.data ?? [],
+        initialData: [],
     });
+
 
 // POST
 export const useStoreMahasiswa = () => {

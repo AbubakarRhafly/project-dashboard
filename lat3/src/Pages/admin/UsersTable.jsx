@@ -1,7 +1,23 @@
+import { usePagination } from "../../Utils/Hooks/usePagination.jsx";
+import TablePaginationFooter from "../../komponen/ui/TablePaginationFooter.jsx";
+
 export default function UsersTable({ data, onEdit }) {
     const rows = Array.isArray(data) ? data : [];
 
-    // kalau kosong
+    const {
+        page,
+        perPage,
+        totalRows,
+        totalPages,
+        startLabel,
+        endLabel,
+        pagedData,
+        canPrev,
+        canNext,
+        prev,
+        next,
+    } = usePagination(rows, { perPage: 5 });
+
     if (rows.length === 0) {
         return (
             <div className="rounded-2xl border border-slate-200 bg-white p-6 text-sm text-slate-500 text-center">
@@ -12,9 +28,9 @@ export default function UsersTable({ data, onEdit }) {
 
     return (
         <div className="space-y-4">
-            {/* MOBILE: card per user, tidak perlu geser-geser */}
+            {/* MOBILE */}
             <div className="space-y-3 md:hidden">
-                {rows.map((u) => (
+                {pagedData.map((u) => (
                     <div
                         key={u.id}
                         className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
@@ -25,9 +41,7 @@ export default function UsersTable({ data, onEdit }) {
                                 <div className="text-sm font-semibold text-slate-900">
                                     {u.name}
                                 </div>
-                                <div className="mt-1 text-xs text-slate-500">
-                                    {u.email}
-                                </div>
+                                <div className="mt-1 text-xs text-slate-500">{u.email}</div>
                             </div>
                             <span className="rounded-full bg-indigo-50 px-3 py-1 text-xs font-medium text-indigo-700 capitalize">
                                 {u.role || "–"}
@@ -39,9 +53,8 @@ export default function UsersTable({ data, onEdit }) {
                                 Permissions
                             </div>
                             <p className="mt-1 text-[11px] text-slate-700 break-words">
-                                {(Array.isArray(u.permissions) ? u.permissions : []).join(
-                                    ", "
-                                ) || "-"}
+                                {(Array.isArray(u.permissions) ? u.permissions : []).join(", ") ||
+                                    "-"}
                             </p>
                         </div>
 
@@ -55,9 +68,25 @@ export default function UsersTable({ data, onEdit }) {
                         </div>
                     </div>
                 ))}
+
+                <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden">
+                    <TablePaginationFooter
+                        totalRows={totalRows}
+                        perPage={perPage}
+                        startLabel={startLabel}
+                        endLabel={endLabel}
+                        page={page}
+                        totalPages={totalPages}
+                        canPrev={canPrev}
+                        canNext={canNext}
+                        onPrev={prev}
+                        onNext={next}
+                        showDivider={false}
+                    />
+                </div>
             </div>
 
-            {/* DESKTOP: tabel biasa */}
+            {/* DESKTOP */}
             <div className="hidden md:block rounded-2xl border border-slate-200 bg-white overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="min-w-[900px] w-full text-sm">
@@ -72,7 +101,7 @@ export default function UsersTable({ data, onEdit }) {
                             </tr>
                         </thead>
                         <tbody>
-                            {rows.map((u) => (
+                            {pagedData.map((u) => (
                                 <tr key={u.id} className="border-t">
                                     <td className="px-4 py-3">{u.id}</td>
                                     <td className="px-4 py-3">{u.name}</td>
@@ -80,11 +109,9 @@ export default function UsersTable({ data, onEdit }) {
                                     <td className="px-4 py-3">{u.role || "-"}</td>
                                     <td className="px-4 py-3">
                                         <span className="text-xs text-slate-600">
-                                            {(
-                                                Array.isArray(u.permissions)
-                                                    ? u.permissions
-                                                    : []
-                                            ).join(", ") || "-"}
+                                            {(Array.isArray(u.permissions) ? u.permissions : []).join(
+                                                ", "
+                                            ) || "-"}
                                         </span>
                                     </td>
                                     <td className="px-4 py-3 text-right">
@@ -100,6 +127,19 @@ export default function UsersTable({ data, onEdit }) {
                         </tbody>
                     </table>
                 </div>
+
+                <TablePaginationFooter
+                    totalRows={totalRows}
+                    perPage={perPage}
+                    startLabel={startLabel}
+                    endLabel={endLabel}
+                    page={page}
+                    totalPages={totalPages}
+                    canPrev={canPrev}
+                    canNext={canNext}
+                    onPrev={prev}
+                    onNext={next}
+                />
             </div>
         </div>
     );

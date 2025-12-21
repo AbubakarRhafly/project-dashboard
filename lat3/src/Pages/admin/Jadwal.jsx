@@ -149,10 +149,6 @@ export default function Jadwal() {
                                         </option>
                                     ))}
                                 </select>
-
-                                {/* kalau project lu pakai input biasa, ganti select jadi input:
-                <input name="kodeMk" value={form.kodeMk} onChange={handleChange} ... />
-                */}
                             </label>
 
                             {/* NIDN */}

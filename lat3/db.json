@@ -1,13 +1,13 @@
 {
   "dosen": [
     {
-      "id": "1",
+      "id": 1,
       "nidn": "12345678",
       "nama": "Dr. Sinta",
       "prodi": "Informatika"
     },
     {
-      "id": "2",
+      "id": 2,
       "nidn": "87654321",
       "nama": "Ir. Rama",
       "prodi": "Sistem Informasi"
@@ -15,77 +15,106 @@
   ],
   "jadwal": [
     {
-      "id": "1",
+      "id": 1,
       "kodeMk": "IF101",
       "hari": "Senin",
       "jam": "08:00",
       "ruang": "D201"
     },
     {
-      "id": "2",
+      "id": 2,
       "kodeMk": "IF102",
       "hari": "Rabu",
       "jam": "10:00",
       "ruang": "E105"
     },
     {
-      "id": "3",
+      "id": 3,
       "kodeMk": "IF201",
       "hari": "Jumat",
       "jam": "13:00",
       "ruang": "Lab 2"
     },
     {
-      "id": "4",
+      "id": 4,
       "kodeMk": "IF301",
       "hari": "Selasa",
       "jam": "09:40",
       "ruang": "C303"
     },
     {
-      "id": "5",
+      "id": 5,
       "kodeMk": "IF401",
       "hari": "Kamis",
       "jam": "15:30",
       "ruang": "A101"
+    },
+    {
+      "id": "e4c2",
+      "kodeMk": "IF103",
+      "nidn": "87654321",
+      "hari": "Selasa",
+      "jam": "07:00 - 08:40",
+      "ruang": "H.4.8"
     }
   ],
   "mahasiswa": [
     {
-      "nim": "A11.2023.15240",
+      "id": 1,
       "nama": "Abubakar Rhafly Eka Putera",
-      "id": "1"
+      "nim": "A11.2023.15240"
     },
     {
-      "id": "2",
+      "id": 2,
       "nama": "Della septi",
       "nim": "A11.2023.12345"
     },
     {
-      "id": "3",
+      "id": 3,
       "nama": "Abu jibril Jizze",
-      "nim": "A11.2023.12345"
+      "nim": "A11.2023.67890"
+    },
+    {
+      "nim": "A11.2024.00001",
+      "nama": "Mahiru",
+      "id": "b3ed"
+    },
+    {
+      "id": "5f86",
+      "nim": "A11.2024.00002",
+      "nama": "Rayhan Daffa"
+    },
+    {
+      "id": "9269",
+      "nim": "A11.2024.00003",
+      "nama": "Midoriya Izuku"
     }
   ],
   "matakuliah": [
     {
-      "id": "1",
+      "id": 1,
       "kode": "IF101",
       "nama": "Algoritma",
       "sks": 3,
       "dosenId": 1
     },
     {
-      "id": "2",
+      "id": 2,
       "kode": "SI205",
       "nama": "Basis Data",
       "sks": 3,
       "dosenId": 2
+    },
+    {
+      "id": "2a39",
+      "kode": "IF103",
+      "nama": "Rekayasa Perangkat Lunak",
+      "sks": 2
     }
   ],
   "users": [
     {
-      "id": "1",
+      "id": 1,
       "name": "Admin",
       "email": "admin@mail.com",
       "password": "admin123",
@@ -104,7 +133,7 @@
       ]
     },
     {
-      "id": "2",
+      "id": 2,
       "name": "Staff",
       "email": "staff@mail.com",
       "password": "staff123",

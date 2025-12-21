@@ -46,7 +46,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Toaster position="top-right" />
       <RouterProvider router={router} />
 
-      {/* Opsional: buat ngecek query/mutation */}
+      {/* ngecek query/mutation */}
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   </React.StrictMode>
