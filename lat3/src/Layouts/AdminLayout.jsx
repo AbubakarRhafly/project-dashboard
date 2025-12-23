@@ -65,6 +65,11 @@ export default function AdminLayout() {
           <span>Jadwal</span>
         </NavLink>
 
+        <NavLink to="/admin/kelas" className={linkClass}>
+          <span>🏫</span>
+          <span>Kelas</span>
+        </NavLink>
+
         <NavLink to="/admin/users" className={linkClass}>
           <span>👥</span>
           <span>Users</span>

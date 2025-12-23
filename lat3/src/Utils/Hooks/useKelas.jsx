@@ -1,51 +1,57 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-    getAllJadwal,
-    storeJadwal,
-    updateJadwal,
-    deleteJadwal,
-} from "../Apis/JadwalApi.jsx";
+import { getAllKelas, storeKelas, updateKelas, deleteKelas } from "../Apis/KelasApi.jsx";
 import { toastError, toastSuccess } from "../Helpers/ToastHelpers.jsx";
 
+const pickArray = (payload) => {
+    if (Array.isArray(payload)) return payload;
+    if (Array.isArray(payload?.data)) return payload.data;
+    if (Array.isArray(payload?.rows)) return payload.rows;
+    return [];
+};
+
+// GET
 export const useKelas = () =>
     useQuery({
         queryKey: ["kelas"],
-        queryFn: getAllJadwal,
-        select: (res) => res?.data ?? [],
+        queryFn: getAllKelas,
+        select: (res) => pickArray(res?.data ?? res),
     });
 
+// POST
 export const useStoreKelas = () => {
-    const queryClient = useQueryClient();
+    const qc = useQueryClient();
     return useMutation({
-        mutationFn: storeJadwal,
+        mutationFn: storeKelas,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["kelas"] });
-            toastSuccess("Kelas/Jadwal berhasil ditambahkan!");
+            qc.invalidateQueries({ queryKey: ["kelas"] });
+            toastSuccess("Kelas berhasil dibuat!");
         },
-        onError: () => toastError("Gagal menambahkan kelas/jadwal."),
+        onError: () => toastError("Gagal membuat kelas."),
     });
 };
 
+// PUT
 export const useUpdateKelas = () => {
-    const queryClient = useQueryClient();
+    const qc = useQueryClient();
     return useMutation({
-        mutationFn: ({ id, data }) => updateJadwal(id, data),
+        mutationFn: ({ id, data }) => updateKelas(id, data),
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["kelas"] });
-            toastSuccess("Kelas/Jadwal berhasil diperbarui!");
+            qc.invalidateQueries({ queryKey: ["kelas"] });
+            toastSuccess("Kelas berhasil diperbarui!");
         },
-        onError: () => toastError("Gagal memperbarui kelas/jadwal."),
+        onError: () => toastError("Gagal memperbarui kelas."),
     });
 };
 
+// DELETE
 export const useDeleteKelas = () => {
-    const queryClient = useQueryClient();
+    const qc = useQueryClient();
     return useMutation({
-        mutationFn: deleteJadwal,
+        mutationFn: deleteKelas,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["kelas"] });
-            toastSuccess("Kelas/Jadwal berhasil dihapus!");
+            qc.invalidateQueries({ queryKey: ["kelas"] });
+            toastSuccess("Kelas berhasil dihapus!");
         },
-        onError: () => toastError("Gagal menghapus kelas/jadwal."),
+        onError: () => toastError("Gagal menghapus kelas."),
     });
 };

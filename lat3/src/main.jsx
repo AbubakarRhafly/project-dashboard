@@ -19,6 +19,7 @@ import Dosen from "./pages/admin/Dosen.jsx";
 import MataKuliah from "./pages/admin/MataKuliah.jsx";
 import Jadwal from "./pages/admin/Jadwal.jsx";
 import Users from "./pages/admin/Users.jsx";
+import Kelas from "./pages/admin/Kelas.jsx";
 
 const router = createBrowserRouter([
   { path: "/", element: <Navigate to="/login" replace /> },
@@ -34,6 +35,7 @@ const router = createBrowserRouter([
       { path: "jadwal", element: <Jadwal /> },
       { path: "mahasiswa", element: <Mahasiswa /> },
       { path: "users", element: <Users /> },
+      { path: "kelas", element: <Kelas /> },
     ],
   },
 ]);

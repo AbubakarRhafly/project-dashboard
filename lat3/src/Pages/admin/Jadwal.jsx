@@ -2,12 +2,11 @@ import { useState } from "react";
 import JadwalTable from "./JadwalTable.jsx";
 
 import {
-    useKelas,
-    useStoreKelas,
-    useUpdateKelas,
-    useDeleteKelas,
-} from "../../Utils/Hooks/useKelas.jsx";
-
+    useJadwal,
+    useStoreJadwal,
+    useUpdateJadwal,
+    useDeleteJadwal,
+} from "../../Utils/Hooks/useJadwal.jsx";
 import { useDosen } from "../../Utils/Hooks/useDosen.jsx";
 import { useMataKuliah } from "../../Utils/Hooks/useMataKuliah.jsx";
 
@@ -16,10 +15,10 @@ import { toastError } from "../../Utils/Helpers/ToastHelpers.jsx";
 
 export default function Jadwal() {
     // Jadwal (dipakai sebagai Kelas)
-    const { data: rows = [], isLoading: loading } = useKelas();
-    const { mutate: store } = useStoreKelas();
-    const { mutate: update } = useUpdateKelas();
-    const { mutate: remove } = useDeleteKelas();
+    const { data: rows = [], isLoading: loading } = useJadwal();
+    const { mutate: store } = useStoreJadwal();
+    const { mutate: update } = useUpdateJadwal();
+    const { mutate: remove } = useDeleteJadwal();
 
     // dropdown referensi (opsional, kalau lu pakai)
     const { data: dosen = [] } = useDosen();

@@ -83,6 +83,16 @@
       "dosenId": 2
     }
   ],
+  "kelas": [
+    {
+      "mahasiswa": [],
+      "dosen": [],
+      "matakuliah": [],
+      "jadwal": [],
+      "users": [],
+      "kelas": []
+    }
+  ],
   "users": [
     {
       "id": 1,

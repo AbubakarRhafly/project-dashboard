@@ -1,4 +1,3 @@
-// src/App.jsx
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import AuthLayout from "./layouts/AuthLayout.jsx";
 import AdminLayout from "./layouts/AdminLayout.jsx";
@@ -6,6 +5,7 @@ import Login from "./pages/Login.jsx";
 import Dashboard from "./pages/admin/Dashboard.jsx";
 import Mahasiswa from "./pages/admin/Mahasiswa.jsx";
 import MahasiswaDetail from "./pages/admin/MahasiswaDetail.jsx";
+import Kelas from "./pages/admin/Kelas.jsx";
 
 export default function App() {
   return (
@@ -25,6 +25,11 @@ export default function App() {
           {/* ⬇️ ini rutenya */}
           <Route path="mahasiswa" element={<Mahasiswa />} />
           <Route path="mahasiswa/:id" element={<MahasiswaDetail />} />
+          <Route path="kelas" element={<Kelas />} />
+          <Route path="dosen" element={<Dosen />} />
+          <Route path="matakuliah" element={<MataKuliah />} />
+          <Route path="jadwal" element={<Jadwal />} />
+          <Route path="users" element={<Users />} />
         </Route>
 
         {/* 404 */}
