@@ -1,15 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 
-/**
- * Reusable client-side pagination for array data.
- */
 export function usePagination(data = [], { perPage = 5, initialPage = 1 } = {}) {
     const [page, setPage] = useState(initialPage);
 
     const totalRows = data?.length ?? 0;
     const totalPages = Math.max(1, Math.ceil(totalRows / perPage));
 
-    // Clamp page biar ga nyangkut di page yang sudah tidak ada (misal setelah delete)
     useEffect(() => {
         setPage((p) => Math.min(Math.max(1, p), totalPages));
     }, [totalPages]);
